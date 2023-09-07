@@ -1,4 +1,5 @@
 const mongoose=require("mongoose")
+require('dotenv').config();
 mongoose.connect(process.env.mongo)
 const express=require("express")
 const app=express()
@@ -13,4 +14,4 @@ const adminRoute=require('./routes/adminRoute')
 app.use('/',adminRoute)
 
 app.listen(process.env.port,
-    console.log("http://localhost:7000/adminlogin"))
+    console.log("http://localhost:7000/"))

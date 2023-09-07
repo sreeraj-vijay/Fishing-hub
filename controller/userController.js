@@ -40,8 +40,9 @@ const securepassword=async(password)=>{
     }
 }
 const guestloadhome=async(req,res)=>{
+  const bannerdata = await banner.find()
   const productdata = await product.find()
-  res.render('home',{ products:productdata})
+  res.render('home',{ products:productdata,banner:bannerdata})
 }
 const loadRegister=async(req,res)=>{
     try{
