@@ -1,0 +1,222 @@
+<%- include('../layouts/adminheader.ejs') %>
+<link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+
+
+<% if(typeof message !== 'undefined') { %>
+  <div class="alert alert-danger mt-4" role="alert">
+    <h6 class="mb-0"><%= message %></h6>
+  </div>
+<% } %>
+
+<form action="/addnewproduct" method="post" enctype="multipart/form-data">
+  <section class="content-main">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Basic</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="product_name" class="form-label">Product Title</label>
+              <input type="text" class="form-control" id="product_name" name="name" placeholder="Type here">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Full Description</label>
+              <input type="text" class="form-control" id="product_description" name="description" placeholder="Type here">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Regular Price</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="text" class="form-control" name="price">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Brand</label>
+                <select class="form-select" name="brand">
+                  <% for (let i = 0; i < brands.length; i++) { %>
+                    <option value="<%= brands[i].bname %>"><%= brands[i].bname %></option>
+                    <% } %> 
+                  </select>
+          
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Shipping</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="product_weight" class="form-label">Weight (gram)</label>
+              <input type="text" class="form-control" id="product_weight" name="weight" placeholder="Enter weight">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Media</h4>
+          </div>
+          <div class="input-upload">
+            <img src="/imgs/theme/upload.svg" id="imgView1" alt="">
+            <input class="form-control" id="input1" name="image" onchange="viewImage1(event),viewImage(event, 1)" type="file">
+          </div>
+          <div class="image-cropper" style="display:none;">
+            <img src="" id="croppedImg1" alt="">
+            <button type="button" id="saveButton1" class="btn-sm btn-primary">Save</button>
+          </div>
+          <span id="imageError"></span>
+        </div>
+        
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Types</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Type</label>
+              <select class="form-select" name="type">
+                <option>Reel</option>
+                <option>Road</option>
+                <option>Frogs</option>
+                <option>Lures</option>
+                <option>Others</option>
+              </select>
+            </div>
+          </div>
+         
+        </div>
+        <div class="form-group">
+          <label for="product_weight" class="form-label">Stock</label>
+          <input type="text" class="form-control" id="product_weight" name="Stock" placeholder="Enter Number of products">
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary btn-block btn-submit">Add Product</button> <a href="/adminhome">   Back to Home</a>
+        
+      </div>
+    </div>
+  </section>
+</form>
+<% if(typeof message !== 'undefined') { %>
+  <div class="alert alert-danger mt-4" role="alert">
+    <h6 class="mb-0"><%= message %></h6>
+  </div>
+<% } %>
+<!-- Include the Cropper.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.js"></script>
+
+<script>
+  function viewImage1(event) {
+document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
+}
+
+function viewImage2(event) {
+document.getElementById('imgView2').src = URL.createObjectURL(event.target.files[0])
+}
+
+function viewImage3(event) {
+document.getElementById('imgView3').src = URL.createObjectURL(event.target.files[0])
+}
+</script>
+<script>
+
+function viewImage(event, index) {
+let input = event.target;
+let reader = new FileReader();
+
+reader.onload = function() {
+let dataURL = reader.result;
+
+let image = new Image();
+image.src = dataURL;
+
+image.onload = function() {
+ // Create a canvas element for resizing
+ let canvas = document.createElement('canvas');
+ let ctx = canvas.getContext('2d');
+
+ // Set the maximum width and height for the preview
+ let maxWidth = 600; // Adjust this value as needed
+ let maxHeight = 600; // Adjust this value as needed
+
+ // Calculate new dimensions while maintaining aspect ratio
+ let width = image.width;
+ let height = image.height;
+
+ if (width > maxWidth) {
+   height *= maxWidth / width;
+   width = maxWidth;
+ }
+
+ if (height > maxHeight) {
+   width *= maxHeight / height;
+   height = maxHeight;
+ }
+
+ // Set canvas dimensions
+ canvas.width = width;
+ canvas.height = height;
+
+ // Draw the resized image onto the canvas
+ ctx.drawImage(image, 0, 0, width, height);
+
+ // Get the resized image as a data URL
+ let resizedDataUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+ let previewImage = document.getElementById('imgView' + index);
+ previewImage.src = resizedDataUrl;
+
+ // Initialize Cropper.js on the resized image
+ let cropper = new Cropper(previewImage, {
+   aspectRatio: 1 / 1,
+   viewMode: 1,
+   guides: true,
+   background: false,
+   autoCropArea: 1,
+   zoomable: true,
+ });
+
+   // Show the image cropper container
+   let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+   cropperContainer.style.display = 'block';
+
+   // Update the cropped image when the "Save" button is clicked
+   let saveButton = document.querySelector('#saveButton' + index);
+   saveButton.addEventListener('click', async function() {
+     let croppedCanvas = cropper.getCroppedCanvas({
+       width: 600, 
+       height: 600 
+     });
+     let croppedImage = document.getElementById("croppedImg" + index);
+     croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+
+     // Generate a unique name for the cropped image file based on the current timestamp
+     let timestamp = new Date().getTime();
+     let fileName = `cropped-img-${timestamp}-${index}.png`;
+
+     await croppedCanvas.toBlob(blob => {
+       let input = document.getElementById('input' + index)
+       let imgFile = new File([blob], fileName, blob)
+       const fileList = new DataTransfer();
+       fileList.items.add(imgFile);
+       input.files = fileList.files
+     });
+     // cropperContainer.style.display = 'none';
+   });
+ }
+ };
+
+ reader.readAsDataURL(input.files[0]);
+}
+ </script>
+
+<%- include('../layouts/adminfooter.ejs') %>

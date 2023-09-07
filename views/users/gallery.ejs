@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF8">
+    <title>Title</title>
+    <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+</head>
+<body>
+    <%for(let i=0;i<products.length; i++) { %>
+        <div id="img-container" style="width: 400px">
+            
+            <img src="/product-images/<%= products[i].image[0] %>" />
+           <%}%>
+        </div>
+
+<script>
+
+var options1 = {
+    width: 300,
+    height: 250,
+    zoomWidth: 200, 
+    offset: {vertical: 0, horizontal: 10},
+    scale: .3 
+};
+
+new ImageZoom(document.getElementById("img-container"), options1);
+
+</script>
+</body>
+</html>

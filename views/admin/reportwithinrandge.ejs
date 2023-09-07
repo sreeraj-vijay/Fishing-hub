@@ -1,0 +1,195 @@
+
+<%- include('../layouts/adminheader.ejs') %>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h2>Order Details</h2>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-primary" id="downloadButton" type="button" onclick="generatePDF()"><i
+        class="text-muted material-icons md-post_add"></i>Create report</button>
+       
+      </div>
+      <a href="/salesreport">Go Back</a>
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" class="form-control">
+      </div>
+      <div class="col-md-6">
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date" class="form-control">
+      </div>
+    </div>
+<br>
+    <h4 id="sumTotal">Total Revenue:</h4>
+ <br>
+    <h4 id="sumTotal1" >Total Products Sold:</h4>
+   <br>
+    <h4 id="sumTotal2">COD  Orders:</h4>
+    <br>
+    <h4 id="sumTotal3">Razorpay Orders:</h4>
+  <br>
+    <h4 id="sumTotal4">Wallet Orders:</h4>
+<br>  
+
+  <table id="myTable" class="table mt-4">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product Name</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Payment Date</th>
+        <th scope="col">Order ID</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<%- include('../layouts/adminfooter.ejs') %>
+<script>
+  const startdate = document.getElementById('start-date');
+  const enddate = document.getElementById('end-date');
+  
+  startdate.addEventListener('change', fetchData);
+  enddate.addEventListener('change', fetchData);
+
+  async function fetchData() {
+    const selectedstartdate = startdate.value;
+    const selectedenddate = enddate.value;
+
+    const date = {
+      start: selectedstartdate,
+      end: selectedenddate,
+    }
+
+    try {
+      const response = await fetch('/weeklyordaily', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ date }), // Wrap selected dates in an object
+      });
+
+      const responseData = await response.json();
+      console.log(responseData)
+
+      // Loop through the response data and display it in the container
+      const totalSum = responseData.reduce((sum, item) => sum + item.total, 0);
+      console.log(totalSum)
+      let totalquantity = 0;
+      let codPaymentCount = 0;
+      let razorpayPaymentCount = 0;
+      let WalletPaymentCount = 0;
+
+      const productTable = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+      
+      responseData.forEach(item => {
+        item.products.forEach(product => {
+          totalquantity = totalquantity + product.quantity;
+        });
+
+        if (item.paymentMethod === "COD") {
+          codPaymentCount++;
+        } else if (item.paymentMethod === "razorpay") {
+          razorpayPaymentCount++;
+        } else if (item.paymentMethod === "Wallet") {
+          WalletPaymentCount++;
+        }
+  item.products.forEach(product => {
+    const row = productTable.insertRow();
+    const productNameCell = row.insertCell(0);
+    const quantityCell = row.insertCell(1);
+    const priceCell = row.insertCell(2);
+    const orderedAtCell = row.insertCell(3);
+    const paymentCell = row.insertCell(4);
+
+    productNameCell.textContent = product.description; // Replace with your actual property
+    quantityCell.textContent = product.quantity;
+    priceCell.textContent = product.price;
+    orderedAtCell.textContent = new Date(item.orderedAt).toLocaleDateString();
+    paymentCell.textContent = item.paymentMethod;
+  });
+})
+     
+
+      // Display the sum of the total in the container
+      const sumTotalContainer = document.getElementById('sumTotal');
+      const sumTotalContainer1 = document.getElementById('sumTotal1');
+      const sumTotalContainer2 = document.getElementById('sumTotal2');
+      const sumTotalContainer3 = document.getElementById('sumTotal3');
+      const sumTotalContainer4 = document.getElementById('sumTotal4');
+
+      sumTotalContainer.textContent = `Total Revenue: ${totalSum}`;
+      sumTotalContainer1.textContent = `Total Products Sold: ${totalquantity}`;
+      sumTotalContainer2.textContent = `COD Count: ${codPaymentCount}`;
+      sumTotalContainer3.textContent = `Razorpay Count: ${razorpayPaymentCount}`;
+      sumTotalContainer4.textContent = `Wallet Count: ${WalletPaymentCount}`;
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+    <script>
+
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Calculate the center position for the text
+    const text = "Sales Report";
+    const pageWidth = doc.internal.pageSize.width;
+    const textWidth = doc.getTextWidth(text);
+    const textX = (pageWidth - textWidth) / 2;
+
+    // Add the centered text to the PDF
+    doc.text(text, textX, 10);
+
+    // Define the margin top distance for the table (e.g., 3 units)
+    const tableMarginTop = 3;
+
+    // Get the table element by its ID
+    const originalTable = document.getElementById("myTable");
+    
+    // Create a clone of the original table
+    const clonedTable = originalTable.cloneNode(true);
+
+    // Format the numbers in the cloned table cells as currency with Indian Rupee symbol (₹)
+    const currencyFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' });
+    clonedTable.querySelectorAll('td:nth-child(6)').forEach((cell) => {
+        const textContent = cell.textContent;
+        if (textContent.length > 1) {
+            cell.textContent = textContent.substring(1);
+        } else {
+            cell.textContent = ''; // Remove the content if it's a single character
+        }
+    });
+
+    // Calculate the Y position for the table (below the text with margin)
+    const tableY = tableMarginTop + 20; // 20 is a padding for the table
+
+    // Use the HTMLTableElement's built-in function to generate the PDF from the cloned table
+    doc.autoTable({ html: clonedTable, startY: tableY });
+
+    // Save the PDF with a specific name
+    doc.save("table.pdf");
+}
+
+    </script>
+
+
+

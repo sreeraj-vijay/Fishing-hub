@@ -1,0 +1,35 @@
+<%- include('../layouts/header.ejs') %>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">Edit Profile</h2>
+    <form action="/editprofileuser" method="POST">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="fname">First Name:</label>
+            <input type="text" id="fname" name="fname" class="form-control" value="<%= user.fname %>" required>
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name:</label>
+            <input type="text" id="lname" name="lname" class="form-control" value="<%= user.lname %>" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>" required>
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile:</label>
+            <input type="tel" id="mobile" name="mobile" class="form-control" value="<%= user.mobile %>" required>
+          </div>
+          <!-- Add other profile fields here -->
+      </div>
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary">Update Profile</button>
+      </div>
+    </form>
+  </div>
+  <br>
+  <br>
+  <br>
+
+  <%- include('../layouts/footer.ejs') %>

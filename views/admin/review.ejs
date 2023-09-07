@@ -1,0 +1,41 @@
+<%- include('../layouts/adminheader.ejs') %>
+<section class="content-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Reviews</h2>
+           
+            <table class="table table-bordered table-hover" id="myTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Subject</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (complaint.length > 0) {
+                    for (let i = 0; i < complaint.length; i++) { %>
+                <tr>
+                  <td><%= complaint[i].name %></td>
+                  <td><%= complaint[i].email %></td>
+                  <td><%= complaint[i].phone %></td>
+                  <td><%= complaint[i].subject %></td>
+                  <td><%= complaint[i].message %></td>
+                </tr>
+                <% } %>
+                <% } %>
+              </tbody>
+            </table>
+            <a href="/adminhome" class="btn btn-primary">Go back</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include('../layouts/adminfooter.ejs') %>

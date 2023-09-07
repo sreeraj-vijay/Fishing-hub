@@ -1,0 +1,49 @@
+<style>
+    /* Custom CSS to style the product images */
+    .product-image {
+      max-width: 50px;
+      cursor: pointer;
+    }
+  </style>
+<%- include('../layouts/adminheader.ejs') %>
+<section>
+    <div class="container">
+        <h1 class="mt-4">Banner List</h1>
+        <a class="btn btn-secondary mb-3" href="/addbanner">Add Banner</a>
+
+        <table class="table table-bordered" id="myTable">
+            <thead class="thead-light">
+                <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Link</th>
+                    <th>Actions</th>
+                    
+
+                </tr>
+            </thead>
+            <tbody>
+                <% banner.forEach((banner) => { %>
+                <tr>
+                    <td><img src="/product-images/<%= banner.image %>" alt="Uploaded Image" class="product-image"></td>
+                    <td><%= banner.title %></td>
+                    <td><%= banner.description %></td>
+                    <td><a href="<%= banner.link %>" target="_blank">Link</a></td>
+                    <td class="action-buttons">
+                        <a class="btn btn-info btn-edit" href="/editBanner?id=<%= banner._id %>">Edit</a>
+                        <a class="btn btn-danger btn-delete" href="/deleteBanner?id=<%= banner._id %>">Delete</a>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <a href="/adminhome" class="btn btn-secondary">Go back</a>
+    </div>
+    <br>
+    <br>
+    <br>
+
+</section>
+
+<%- include('../layouts/adminfooter.ejs') %>

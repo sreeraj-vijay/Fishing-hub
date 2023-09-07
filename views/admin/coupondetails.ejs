@@ -1,0 +1,42 @@
+<%- include('../layouts/adminheader.ejs') %>
+    <section class="content-main container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Brand List</h2>
+                <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>Secret id</th>
+                            <th>Discount</th>
+                            <th>ExpirationDate Date</th>
+                            <th>Minimum amount must purchase</th>
+                            <th>Maximun discount</th>
+                            <th>Change</th>
+            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (let i = 0; i < coupons.length; i++) { %>
+                        <tr>
+                            <td><%= coupons[i].code %></td>
+                            <td><%= coupons[i].discount%>%</td>
+                            <td><%= coupons[i].expirationDate.toLocaleDateString() %></td>
+                            <td><%= coupons[i].minimum%></td>
+                            <td><%= coupons[i].maximum%></td>
+                            
+                            <td>
+                                <a href="/deletecoupon?id=<%=coupons[i]._id%>" class="btn btn-danger">Delette</a>
+                               
+                            </td>
+                        
+                        <% } %>
+                    </tbody>
+                </table>
+                <a href="/adminhome" class="btn btn-secondary">Go back</a>
+            </div>
+        </div>
+    </section>
+    <%- include('../layouts/adminfooter.ejs') %>

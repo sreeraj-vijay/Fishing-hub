@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Coupons</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .coupon-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .coupon {
+      background-color: #f8f9fa;
+      width: 300px;
+      height: 200px;
+      padding: 20px;
+      margin: 10px;
+      color: #000;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .coupon:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">Coupons</h2>
+    <div class="coupon-container">
+      <% for (let i = 0; i < coupon.length; i++) { %>
+      <div class="coupon" data-toggle="modal" data-target="#couponModal<%= i %>">
+        <h4>Coupon Code: <%= coupon[i].code %></h4>
+        <p>Discount: <%= coupon[i].discount %>%</p>
+        <p>Please Remember to Copy the code</p>
+        <p>If your Eligible</p>
+      </div>
+      <!-- Modal for each coupon -->
+      <div class="modal fade" id="couponModal<%= i %>" tabindex="-1" role="dialog" aria-labelledby="couponModalLabel<%= i %>" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="couponModalLabel<%= i %>">Coupon Details</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h4>Coupon Code: <%= coupon[i].code %></h4>
+              <p>Discount: <%= coupon[i].discount %>%</p>
+              <p>Expiry Date: <%= coupon[i].expirationDate %></p>
+              <p>Minimum Amount to Purchase: ₹<%= coupon[i].minimum %></p>
+              <p>Maximum Discount Amount: ₹<%= coupon[i].maximum %></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+      
+    </div>
+    
+  </div>
+  <div class="container mt-5">
+    <a href="/cart" class="btn btn-secondary">Back to checkout</a> <!-- Back button -->
+  </div>
+  
+  <!-- Include Bootstrap JS at the end of the body -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

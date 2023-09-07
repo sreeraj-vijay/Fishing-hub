@@ -1,0 +1,119 @@
+<%- include('../layouts/header.ejs') %> -->
+
+<main class="main">
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/anish123.jpg')">
+        <div class="container">
+            <div class="form-box">
+                <div class="form-tab">
+                    <ul class="nav nav-pills nav-fill" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="signin-2" aria-selected="false">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="register-tab-2" data-toggle="tab" href="#register-2" role="tab" aria-controls="register-2" aria-selected="true">Register</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+                            <form action="/login" method="post">
+
+                                <% if(typeof message !== 'undefined') { %>
+                                    <h10 style="color: red "><%= message %></h10>
+                                <% } %>
+
+                                <div class="form-group">
+                                    <label for="singin-email-2">Username or email address *</label>
+                                    <input type="email" class="form-control" id="" name="email" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="singin-password-2">Password *</label>
+                                    <input type="password" class="form-control" id="" name="password" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>LOG IN</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+
+                                    <a href="forgotpassword" class="forgot-link">Forgot Your Password?</a>
+                                </div><!-- End .form-footer -->
+                            </form>
+                        </div><!-- .End .tab-pane -->
+                        <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
+                            <% if(typeof message !== 'undefined') { %>
+                                <h10 style="color: red "><%= message %></h10>
+                            <% } %>
+                            <div id="error-message" style="color: red;"></div>
+                            <form action="/register" method="post">
+                                <div class="form-group">
+                                    <label for="register-email-2">Enter first name *</label>
+                                    <input type="text" class="form-control" id="fname" name="fname" required>
+                                    <label for="register-email-2">Enter your last name *</label>
+                                    <input type="text" class="form-control" id="lname" name="lname" required>
+                                    <label for="register-email-2">Enter your phone number *</label>
+                                    <input type="text" class="form-control" id="mobile" name="mobile" required>
+                                    <label for="register-email-2">Enter your Email *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <label for="register-email-2">Enter your password *</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2" onclick="return validateForm();">
+                                        <span>SUBMIT</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+                                </div><!-- End .form-footer -->
+                            </form>
+                        </div><!-- .End .tab-pane -->
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div><!-- End .form-box -->
+        </div><!-- End .container -->
+    </div><!-- End .login-page section-bg -->
+</main><!-- End .main -->
+
+<script>
+    function validateForm() {
+        var firstName = document.getElementById("fname").value;
+        var lastName = document.getElementById("lname").value;
+        var email = document.getElementById("email").value;
+        var phone = document.getElementById("mobile").value;
+        var password = document.getElementById("password").value;
+        var errorMessage = document.getElementById("error-message");
+
+        // Regular expressions for validation
+        var nameRegex = /^[a-zA-Z]+$/;
+        var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        var phoneRegex = /^\d{10}$/;
+        var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+        if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+            errorMessage.textContent = "Please enter a valid first and last name (only alphabets allowed).";
+            return false; // Prevent form submission
+        }
+
+        if (!emailRegex.test(email)) {
+            errorMessage.textContent = "Please enter a valid email address.";
+            return false; // Prevent form submission
+        }
+
+        if (!phoneRegex.test(phone)) {
+            errorMessage.textContent = "Please enter a valid 10-digit phone number.";
+            return false; // Prevent form submission
+        }
+
+        if (!passwordRegex.test(password)) {
+            errorMessage.textContent = "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.";
+            return false; // Prevent form submission
+        }
+
+        // Additional validation logic can be added here
+
+        return true; // Allow form submission
+    }
+</script>
+
+<%- include('../layouts/footer.ejs') %> -->

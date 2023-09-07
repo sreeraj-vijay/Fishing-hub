@@ -1,0 +1,122 @@
+<%-include('../layouts/header.ejs')%>
+  
+        <main class="main">
+            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                <div class="container d-flex align-items-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Products</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Default</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="product-details-top">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="product-gallery product-gallery-vertical">
+                                    <div class="row">
+                                
+                                        
+                                        <figure class="product-main-image" id='data-zoom-image' style="width: 400px; z-index:99;">
+                                    
+                                           
+                                            <img id="product-zoom" src="/product-images/<%= products.image[0] %>" data-zoom-image="/product-images/<%= products.image[0]%> " alt="product image">
+    
+                                            <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                                <i class="icon-arrows"></i>
+                                            </a>
+                                        </figure>
+                                    
+                                        
+                                        <div id="product-zoom-gallery" class="product-image-gallery">
+                                            <a class="product-gallery-item active" href="#" data-image="/product-images/<%= products.image[0]%>" data-zoom-image="/product-images/<%= products.image[0]%>">
+                                                <img src="/product-images/<%= products.image[0]%> " alt="product side">
+                                            </a>
+                                            <a class="product-gallery-item active" href="#" data-image="/product-images/<%= products.image[1]%>" data-zoom-image="/product-images/<%= products.image[1]%>">
+                                                <img src="/product-images/<%= products.image[1]%> " alt="product side">
+                                            </a>
+                                            <a class="product-gallery-item active" href="#" data-image="/product-images/<%= products.image[2]%>" data-zoom-image="/product-images/<%= products.image[2]%>">
+                                                <img src="/product-images/<%= products.image[2]%> " alt="product side">
+                                            </a>
+                                            <a class="product-gallery-item active" href="#" data-image="/product-images/<%= products.image[3]%>" data-zoom-image="/product-images/<%= products.image[3]%>">
+                                                <img src="/product-images/<%= products.image[3]%> " alt="product side">
+                                            </a>
+                                        </div>
+                                    </div><!-- End .row -->
+                                    
+                                </div><!-- End .product-gallery -->
+                            </div><!-- End .col-md-6 -->
+                           
+
+                            <div class="col-md-6">
+                                <div class="product-details">
+                                    <h1 class="product-title" ><%=products.name%></h1><!-- End .product-title -->
+
+                            
+
+                                    <div class="product-price">
+                                        ₹<%=products.price%>
+                                    </div><!-- End .product-price -->
+
+                                    <div class="product-content">
+                                        <p><%=products.description%></p>
+                                    </div><!-- End .product-content -->
+
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="qty">Qty:</label>
+                                        <div class="product-details-quantity">
+                                            <input type="number" id="qty" name="quantity" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                        </div><!-- End .product-details-quantity -->
+                                        
+                                    </div><!-- End .details-filter-row -->
+
+                                    <div class="product-details-action">
+                                        <a href="/addtocart?id=<%=products._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+
+                                        <div class="details-action-wrapper">
+                                            <a href="/addtowishlist?id=<%=products._id %>" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                           
+                                        </div><!-- End .details-action-wrapper -->
+                                    </div><!-- End .product-details-action -->
+                                </div><!-- End .product-details -->
+                            </div><!-- End .col-md-6 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .product-details-top -->
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+            <script>
+                const mainImage = document.getElementById('product-zoom');
+                const thumbnailLinks = document.querySelectorAll('.product-gallery-item');
+            
+                thumbnailLinks.forEach(thumbnailLink => {
+                    thumbnailLink.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        
+                        const newImageSrc = this.getAttribute('data-image');
+                        const newZoomImageSrc = this.getAttribute('data-zoom-image');
+                        
+                        mainImage.src = newImageSrc;
+                        mainImage.setAttribute('data-zoom-image', newZoomImageSrc);
+                    });
+                });
+            </script>
+            <script>
+
+                var options1 = {
+                    width: 300,
+                    height: 250,
+                    zoomWidth: 2000, 
+                    offset: {vertical: 0, horizontal: 10},
+                    scale: .6
+                };
+                
+                new ImageZoom(document.getElementById('data-zoom-image'), options1);
+                
+                </script>
+        
+          
+        <%- include('../layouts/footer.ejs') %>

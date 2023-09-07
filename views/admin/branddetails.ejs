@@ -1,0 +1,54 @@
+
+    <%- include('../layouts/adminheader.ejs') %>
+    <section class="content-main container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Brand List</h2>
+                <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered table-striped" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Offer</th>
+                            <th>Off expirationDate</th>
+                            <th>Actions</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (brands.length > 0) {
+                        for (let i = 0; i < brands.length; i++) { %>
+                        <tr>
+                            <td><%= brands[i].bname %></td>
+                            <td><%= brands[i].description %></td>
+                            <td><%= brands[i].offer %></td>
+                            <td><%= brands[i].offerupto.toLocaleDateString() %></td>
+                            <td>
+                                <a href="/admin/editbrand?id=<%= brands[i]._id %>" class="btn btn-primary">Edit</a>
+                               
+                            </td>
+                            <td>
+                                <% if (brands[i].is_listed) { %>
+                                <a href="/admin/unlistbrand?id=<%= brands[i]._id %>" class="btn btn-danger">unListed</a>
+                                <% } else { %>
+                                <a href="/admin/listbrand?id=<%= brands[i]._id %>" class="btn btn-success">listed</a>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <% }
+                        } else { %>
+                        <tr>
+                            <td colspan="4">Brand not found</td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <a href="/adminhome" class="btn btn-secondary">Go back</a>
+            </div>
+        </div>
+    </section>
+    <%- include('../layouts/adminfooter.ejs') %>
+

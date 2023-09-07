@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Details</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a8469362d0.js" crossorigin="anonymous"></script>
+  <style>
+    /* Custom styles for the address-details div */
+    .address-details {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .address-details h3 {
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
+    .address-details table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .address-details th, .address-details td {
+      padding: 8px;
+      border: 1px solid #dee2e6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5 text-center">
+    <h2>Order Details</h2>
+    <a href="/invoice?id=<%=order._id%>" class="btn btn-primary">Download Invoice</a>
+    <div class="address-details">
+      <h3>Delivery Address</h3>
+      <table id="myTable">
+        <tr>
+          <th>Name:</th>
+          <td><%= order.userAddress.address[0].order_name %></td>
+        </tr>
+        <tr>
+          <th>Mobile:</th>
+          <td><%= order.userAddress.address[0].newmobile %></td>
+        </tr>
+        <tr>
+          <th>Address:</th>
+          <td><%= order.userAddress.address[0].house_address %></td>
+        </tr>
+        <tr>
+          <th>City:</th>
+          <td><%= order.userAddress.address[0].locality %></td>
+        </tr>
+        <tr>
+          <th>Pincode:</th>
+          <td><%= order.userAddress.address[0].pincode %></td>
+        </tr>
+        <tr>
+          <th>District:</th>
+          <td><%= order.userAddress.address[0].place %></td>
+        </tr>
+        <tr>
+          <th>State:</th>
+          <td><%= order.userAddress.address[0].state %></td>
+        </tr>
+        <tr>
+          <th>Payment Price:</th>
+          <td><%= order.products[0].price %></td>
+        </tr>
+        <tr>
+          <th>Payment Date:</th>
+          <td><%= order.orderedAt.toLocaleDateString() %></td>
+        </tr>
+        <tr>
+            <th>Amount Payable:</th>
+            <td><%= order.subtotal %></td>
+          </tr>
+      </table>
+    </div>
+    <a href="/users/shopmain" class="btn btn-success my-3">Continue Shopping</a>
+  </div>
+</body>
+</html>

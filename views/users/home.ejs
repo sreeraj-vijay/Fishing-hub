@@ -1,0 +1,285 @@
+<%- include('../layouts/header.ejs') %>
+    <main class="main">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="banner banner-big banner-overlay">
+						<a href="#">
+							<section class="">
+								<div class="container-fluid">
+								  <div id="bannerSlider" class="carousel slide row fullscreen align-items-center justify-content-start" data-ride="carousel">
+									<div class="carousel-inner">
+									  <% banner.forEach((banner, index) => { %>
+									  <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+										<div class="row align-items-center d-flex">
+										  <div class="col-lg-12">
+											<div class="banner-img" style="position: relative;">
+												<a href=""><img class="img-fluid" src="/product-images/<%= banner.image %>" alt="" style="width: 100%; height:70vh;" alt=""></a>
+												<p style="z-index: 2; position: absolute; top: 50%; left: 30%; transform: translate(-50%, -50%);  padding: 10px; color: black ; height: 200px ; font-size: 24px;">
+													<%= banner.title %> <br>
+													<%= banner.description %>
+												</p>
+											  </div>
+										  </div>
+										</div>
+									  </div>
+									  <% }) %>
+									</div>
+									<a class="carousel-control-prev" href="#bannerSlider" role="button" data-slide="prev" style="align-items:end; margin-bottom: 10px;" >
+										<span class="sr-only">Previous</span>
+									  </a>
+									  <a class="carousel-control-next" href="#bannerSlider" role="button" data-slide="next" style="align-items:end;margin-bottom: 10px;">
+										<i class="bi bi-arrow-right"></i>
+										<span class="sr-only">Next</span>
+									  </a>
+								  </div>
+								</div>
+						</a>
+
+					</div><!-- End .banner -->
+				</div><!-- End .col-lg-6 -->
+  </section>
+			<div class="row justify-content-center">
+			</div><!-- End .row -->
+		</div><!-- End .container-fluid -->
+
+		<div class="icon-boxes-container bg-transparent">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8 col-12 icon-boxes"">
+						<div class="col-sm-6 col-lg-4">
+							<div class="icon-box icon-box-side">
+								<span class="icon-box-icon">
+									<i class="icon-truck"></i>
+								</span>
+
+								<div class="icon-box-content">
+									<h3 class="icon-box-title">Payment & Delivery</h3><!-- End .icon-box-title -->
+									<p>Free shipping for All Customer</p>
+								</div><!-- End .icon-box-content -->
+							</div><!-- End .icon-box -->
+						</div><!-- End .col-sm-6 col-lg-4 -->
+						
+						<div class="col-sm-6 col-lg-4">
+							<div class="icon-box icon-box-side">
+								<span class="icon-box-icon">
+									<i class="icon-rotate-left"></i>
+								</span>
+
+								<div class="icon-box-content">
+									<h3 class="icon-box-title">Return & Refund</h3><!-- End .icon-box-title -->
+									<p>Free 100% money back guarantee</p>
+								</div><!-- End .icon-box-content -->
+							</div><!-- End .icon-box -->
+						</div><!-- End .col-sm-6 col-lg-4 -->
+
+						<div class="col-sm-6 col-lg-4">
+							<div class="icon-box icon-box-side">
+								<span class="icon-box-icon">
+									<i class="icon-headphones"></i>
+								</span>
+
+								<div class="icon-box-content">
+									<h3 class="icon-box-title">Quality Support</h3><!-- End .icon-box-title -->
+									<p>Alway online feedback 24/7</p>
+								</div><!-- End .icon-box-content -->
+							</div><!-- End .icon-box -->
+						</div><!-- End .col-sm-6 col-lg-4 -->
+					</div>
+				</div><!-- End .row -->
+			</div><!-- End .container -->
+		</div><!-- End .icon-boxes-container -->
+
+		<div class="bg-light-2 pt-6 pb-6 featured">
+			<div class="container-fluid">
+				<div class="heading heading-center mb-3">
+					<h2 class="title">FEATURED PRODUCTS</h2><!-- End .title -->
+
+					<ul class="nav nav-pills justify-content-center" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link active" id="featured-women-link" data-toggle="tab" href="#featured-women-tab" role="tab" aria-controls="featured-women-tab" aria-selected="true">Shop now</a>
+						</li>
+					</ul>
+				</div><!-- End .heading -->
+
+				<div class="tab-content tab-content-carousel">
+					<div class="tab-pane p-0 fade show active" id="featured-women-tab" role="tabpanel" aria-labelledby="featured-women-link">
+						<div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+							data-owl-options='{
+								"nav": false, 
+								"dots": true,
+								"margin": 20,
+								"loop": false,
+								"responsive": {
+									"0": {
+										"items":2
+									},
+									"480": {
+										"items":2
+									},
+									"768": {
+										"items":3
+									},
+									"992": {
+										"items":4
+									},
+									"1200": {
+										"items":5,
+										"nav": true
+									}
+								}
+							}'>
+<!-- Assuming you have a common layout or structure for your pages -->
+<!-- Add the following code in your home.ejs or the page where you want to display the products -->
+
+<!-- Make sure the products array is passed from the server-side -->
+<% for(let i=0;i<products.length; i++){ %>
+	<%if(products[i].is_listed) { %>
+		 <div class="product product- text-center">
+			<figure class="product-media">
+				<a href="/users/gallery?id=<%= products[i]._id %>"> 
+			  <img src="/product-images/<%= products[i].image[0] %>" id="image" > </a>
+			  
+	
+				<div class="product-action-vertical">
+					<a href="/addtowishlist?id=<%=products[i]._id %>" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+			
+				</div><!-- End .product-action-vertical -->
+	
+				<div class="product-action">
+					<a href="/addtocart?id=<%=products[i]._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+				</div><!-- End .product-action -->
+			</figure><!-- End .product-media -->
+	
+			<div class="product-details">
+				<h2 class="product-title"><a href="/users/gallery?id=<%= products[i]._id %>"><%= products[i].name %></a></h2>
+				<span class="product-price product-offer-price" style="font-size: 12px">Regular price $ <%= products[i].off_price %></span>
+				<span style="color: green; font-size: 12px" class="product-price product-offer-percentage">Brand discount <%= products[i].offerpercentage %>%</span>
+				<span class="product-price product-regular-price" style="font-size: 15px">$<%= products[i].price %></span>
+				<p class="product-description"><%= products[i].brand %></p>
+				
+			</div><!-- End .product-details -->
+			
+		</div><!-- End .product -->
+	<% } %>	
+	<% }%>
+
+
+							
+		</div><!-- End .product-body -->
+								</div><!-- End .product -->
+							</div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+						</div><!-- End .row -->
+					</div><!-- End .products -->
+				</div><!-- .End .tab-pane -->
+				
+
+
+		<div class="bg-light-2 pt-7 pb-6 testimonials">
+			<div class="container">
+				<h2 class="title text-center mb-2">Our Customers Say</h2><!-- End .title text-center -->
+				<div class="owl-carousel owl-simple owl-testimonials" data-toggle="owl" 
+					data-owl-options='{
+						"nav": false, 
+						"dots": true,
+						"margin": 20,
+						"loop": false,
+						"responsive": {
+							"1200": {
+								"nav": true
+							}
+						}
+					}'>
+					<blockquote class="testimonial testimonial-icon text-center">
+						<p class="lead">“Really great store”</p><!-- End .lead -->
+						<p>"I've been using this fishing reel for years, and it still performs like a champ. It's incredibly durable and smooth, making it a pleasure to use every time I'm out on the water." </p>
+
+						<cite>
+							SREERAJ VIJAY,
+							<span>Customer</span>
+						</cite>
+					</blockquote><!-- End .testimonial -->
+
+					<blockquote class="testimonial testimonial-icon text-center">
+						<p class="lead">“Friendly Support”</p><!-- End .lead -->
+						<p>"I recently bought this new fishing rod, and it's been a game-changer. The sensitivity and casting distance are incredible! Definitely a must-have for any angler."</p>
+
+						<cite>
+							SACHIN MS
+							<span>Customer</span>
+						</cite>
+					</blockquote><!-- End .testimonial -->
+
+					<blockquote class="testimonial testimonial-icon text-center">
+						<p class="lead">“Excellent Products”</p><!-- End .lead -->
+						<p>“These fishing lures are a game-saver! They mimic the prey fish perfectly, and I've had so much success with them. They're a staple in my tackle box now.”</p>
+
+						<cite>
+							ABHIDAS S
+							<span>Customer</span>
+						</cite>
+					</blockquote><!-- End .testimonial -->
+				</div><!-- End .testimonials-slider owl-carousel -->
+			</div><!-- End .container -->
+		</div><!-- End .bg-light pt-5 pb-5 -->
+
+		<div class="brands-border owl-carousel owl-simple" data-toggle="owl" 
+			data-owl-options='{
+				"nav": false, 
+				"dots": false,
+				"margin": 0,
+				"loop": false,
+				"responsive": {
+					"0": {
+						"items":2
+					},
+					"420": {
+						"items":3
+					},
+					"600": {
+						"items":4
+					},
+					"900": {
+						"items":5
+					},
+					"1024": {
+						"items":6
+					},
+					"1360": {
+						"items":7
+					}
+				}
+			}'>
+			<a href="#" class="brand">
+				<img src="assets/fishingimages/lucana.jfif" alt="Brand Name">
+			</a>
+
+			<a href="#" class="brand">
+				<img src="assets/fishingimages/shimano.png" alt="Brand Name">
+			</a>
+
+			<a href="#" class="brand">
+				<img src="assets/fishingimages/HD-wallpaper-nike-logo-grunge-black-backgroud-nike-logo-thumbnail.jpg" alt="Brand Name">
+			</a>
+
+			<a href="#" class="brand">
+				<img src="assets/fishingimages/diawa.png" alt="Brand Name">
+			</a>
+
+			<a href="#" class="brand">
+				<img src="assets/fishingimages/pen.png" alt="Brand Name" style="background-color: black;">
+			</a>
+
+			<a href="#" class="brand">
+				<img src="assets/fishingimages/kastking.png" alt="Brand Name">
+			</a>
+
+			<a href="#" class="brand">
+				<img src="assets/fishingimages/barkely.png" alt="Brand Name">
+			</a>
+		</div><!-- End .owl-carousel -->
+	</main><!-- End .main -->
+	
+	<%- include('../layouts/footer.ejs') %>
+
+	

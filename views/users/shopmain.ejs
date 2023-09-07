@@ -1,0 +1,163 @@
+
+      <%- include('../layouts/header.ejs') %>
+   
+      <main class="main">
+        <div class="container mt-5">
+          <div class="row">
+            <!-- Left side filter form -->
+            <div class="col-lg-6">
+              <form action="/users/shopmain" method="GET" class="form-inline" id="brandForm">
+                <div class="form-group">
+                  <select name="bname" class="form-control mr-2">
+                    <option value="">All Brands</option>
+                    <% brands.forEach(brand => { %>
+                    <option value="<%= brand.bname %>" <%= selectedBrand === brand.bname ? 'selected' : '' %>><%= brand.bname %> </option>
+                    <% }); %>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="reset" class="btn btn-link"><i class="fas fa-sync-alt"></i></button>
+              </form>
+            </div>
+      
+            <!-- Right side search and sort forms -->
+            <div class="col-lg-6 d-flex justify-content-end align-items-center flex-column"> <!-- Use 'justify-content-end' class to align contents to the right, 'align-items-center' to center the contents vertically, and 'flex-column' to align them vertically -->
+              <!-- Search form -->
+               <form action="/users/shopmain" method="GET" class="form-inline mb-3" id="searchForm">
+                <div class="form-group">
+                  <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+              </form> 
+      
+            <!-- Sort options -->
+  <form action="/users/shopmain" method="GET" class="form-inline" id="sortForm">
+    <div class="form-group">
+      <label for="sortBy">Sort By:</label>
+      <select class="form-control ml-2" name="sortBy" id="sortBy" onchange="document.getElementById('sortForm').submit()">
+        <option value="price_asc">Price (Low to High)</option>
+        <option value="price_desc">Price (High to Low)</option>
+        <option value="brand_asc">Brand (A to Z)</option>
+        <option value="brand_desc">Brand (Z to A)</option>
+      </select>
+    </div>
+  </form>
+  <br>
+  <br>
+  
+  
+            </div>
+          </div>
+        </div>
+      </main>
+              <!-- Featured Products Section -->
+              <div class="bg-light-2 pt-6 pb-6 featured">
+                  <div class="container">
+                      <h2 class="title text-center mb-2">FEATURED PRODUCTS</h2>
+                      <ul class="nav nav-pills justify-content-center" role="tablist">
+                          <!-- Add your tab links here if required -->
+                      </ul>
+  
+                      <div class="tab-content tab-content-carousel">
+                          <!-- Featured Women Products -->
+                          <div class="tab-pane p-0 fade show active" id="featured-women-tab" role="tabpanel" aria-labelledby="featured-women-link">
+                              <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+                                  data-owl-options='{
+                                      "nav": false, 
+                                      "dots": true,
+                                      "margin": 20,
+                                      "loop": false,
+                                      "responsive": {
+                                          "0": {
+                                              "items":2
+                                          },
+                                          "480": {
+                                              "items":2
+                                          },
+                                          "768": {
+                                              "items":3
+                                          },
+                                          "992": {
+                                              "items":4
+                                          },
+                                          "1200": {
+                                              "items":5,
+                                              "nav": true
+                                          }
+                                      }
+                                  }'>
+                                  <!-- Product Grid -->
+                                  <% for (let i = 0; i < products.length; i++) { %>
+                                      <% if (products[i].is_listed) { %>
+                                          <div class="product product-card text-center">
+                                              <figure class="product-media">
+                                                  <a href="/users/gallery?id=<%= products[i]._id %>">
+                                                  <img src="/product-images/<%= products[i].image[0] %>" id="image" alt="<%= products[i].name %>"></a>
+                                                  <!-- ... Existing product image code ... -->
+                                                  <div class="product-action-vertical">
+                                                    <a href="/addtowishlist?id=<%=products[i]._id %>" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                                
+                                                  </div><!-- End .product-action-vertical -->
+                                            
+                                                  <div class="product-action">
+                                                    <a href="/addtocart?id=<%=products[i]._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                  </div><!-- End .product-action -->
+                                              </figure><!-- End .product-media -->
+                                             
+                                              <div class="product-details">
+                                                  <h2 class="product-title"><%= products[i].name %></h2>
+                                                  <span class="product-price product-offer-price" style="font-size: 12px">Regular price $ <%= products[i].off_price %></span>
+          <span style="color: green; font-size: 12px" class="product-price product-offer-percentage">Brand discount <%= products[i].offerpercentage %>%</span>
+                                                  <span class="product-price">₹ <%= products[i].price %></span>
+                                                  <p class="product-description"><%= products[i].brand %></p>
+                                                  <!-- ... Existing product action buttons ... -->
+                                              </div><!-- End .product-details -->
+                                             
+                                          </div><!-- End .product -->
+                                      <% } %>
+                                  <% } %>
+                                  <!-- End of Product Grid -->
+                              </div><!-- End .owl-carousel -->
+                          </div><!-- End .tab-pane -->
+  
+                          <!-- Featured Men Products -->
+                          <!-- ... Existing code for the second tab pane ... -->
+                      </div><!-- End .tab-content -->
+                  </div><!-- End .container -->
+              </div><!-- End .featured -->
+              <div>
+              <!-- pagination concept  -->
+              <% if (totalpages > 1) { %>
+                  <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                      <% if (currentpage > 1) { %>
+                        <li class="page-item">
+                          <a class="page-link" href="/users/shopmain?page=<%= currentpage - 1 %>">&laquo; Previous</a>
+                        </li>
+                      <% } %>
+                      <% for (let i = 1; i <= totalpages; i++) { %>
+                        <li class="page-item <%= currentpage === i ? 'active' : '' %>">
+                          <a class="page-link" href="/users/shopmain?page=<%= i %>"><%= i %></a>
+                        </li>
+                      <% } %>
+                      <% if (currentpage < totalpages) { %>
+                        <li class="page-item">
+                          <a class="page-link" href="/users/shopmain?page=<%= currentpage + 1 %>">Next &raquo;</a>
+                        </li>
+                      <% } %>
+                    </ul>
+                  </nav>
+                <% } %>
+                
+              </div>
+              <!-- Testimonials Section -->
+              <!-- ... Existing testimonials code ... -->
+  
+              <!-- Brands Section -->
+              <!-- ... Existing brands code ... -->
+          </div><!-- End .container-fluid -->
+      </main><!-- End .main -->
+  
+      <%- include('../layouts/footer.ejs') %>
+  
+ 

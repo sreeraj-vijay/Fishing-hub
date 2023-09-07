@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Center content vertically and horizontally */
+    .center-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    
+    /* Adjust the form width */
+    .custom-form {
+      max-width: 500px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="center-content">
+    <div class="container custom-form">
+      <% include('../layouts/header.ejs') %>
+      <form action="/updatedorder" method="post">
+        <section class="content-main">
+          <h3 class="text-center mb-4">Product Details</h3>
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <tbody>
+                <tr>
+                  <td><%= order._id %></td>
+                  <td>
+                    <select class="form-control" name="status">
+                      <option value="Pending">Pending</option>
+                      <option value="Processing">Processing</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <input type="hidden" name="id" value="<%= order._id %>">
+          <div class="text-center">
+            <button type="submit" class="btn btn-success mr-2">Update</button>
+            <a href="/adminorderdetails" class="btn btn-primary ml-2">Go back</a>
+          </div>
+        </section>
+      </form>
+      <% include('../layouts/footer.ejs') %>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

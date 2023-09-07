@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Product Form</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom CSS for image containers */
+    .image-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 50px;
+    }
+    .image-box {
+      flex: 1 0 calc(33.33% - 10px);
+    }
+    .product-image {
+      width: 100%;
+      max-height: 80px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <% if(typeof message !== 'undefined') { %>
+      <div class="alert alert-info">
+        <h6><%= message %></h6>
+      </div>
+  <% } %>
+  
+  <form action="/editproduct" method="post" enctype="multipart/form-data" accept="image/jpg,image/jpeg,image/png,image/gif,image/webp">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h4>Basic</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="product_name">Product Title</label>
+              <input type="text" class="form-control" id="product_name" name="name" value="<%=  products.name %>" placeholder="Type here">
+            </div>
+            <div class="form-group">
+              <label>Full Description</label>
+              <input type="text" class="form-control" name="description" value="<%=  products.description %>" placeholder="Type here">
+            </div>
+            <div class="form-group">
+              <label>Price</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input type="text" class="form-control" name="price" value="<%=  products.price %>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="product_weight">Weight (gram)</label>
+              <input type="text" class="form-control" id="product_weight" value="<%=  products.weight %>" name="weight" placeholder="Enter weight">
+            </div>
+            <div class="form-group">
+              <label>Brand</label>
+              <select class="form-select" name="bname">
+                <% for (let i = 0; i < brands.length; i++) { %>
+                  <option value="<%= brands[i].bname  %>"><%= brands[i].bname %></option>
+                <% } %> 
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Stock</label>
+              <input type="number" class="form-control" name="stock" value="<%= products.stock %>" placeholder="Enter stock">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h4>Media</h4>
+          </div>
+          <div class="card-body">
+            <div class="image-container">
+              <% for (let i = 0; i < products.image.length; i++) { %>
+                <div class="image-box">
+                  <img src="/product-images/<%= products.image[i] %>" alt="Uploaded Image" class="product-image" data-toggle="modal" data-target="#imageModal" data-image="/product-images/<%= products.image[i] %>">
+                  <div class="image-actions mt-2">
+                    <a class="btn btn-danger btn-sm" data-image="/product-images/<%= products.image[i] %>" href="/admin/deleteimage?id=<%= products._id %>&index=<%= i %>">Delete</a>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+            <input type="hidden" name="id" value="<%= products._id %>">
+            <div>
+            <input type="file" class="form-control-file" name="image" multiple>
+          </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <h4>Types</h4>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label>Type</label>
+              <select class="form-control" name="type">
+                <option>Reel</option>
+                <option>Road</option>
+                <option>Frogs</option>
+                <option>Lures</option>
+                <option>Others</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <a href="/productdetails" class="btn btn-back">Back</a>
+        <button type="submit" class="btn btn-primary btn-submit">Update Product</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

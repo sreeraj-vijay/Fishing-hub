@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<% if(typeof message !== 'undefined') { %>
+    <div class="alert alert-danger mt-4" role="alert">
+      <h6 class="mb-0"><%= message %></h6>
+    </div>
+  <% } %>
+
+<body>
+    <% include('../layouts/adminheader.ejs')%>
+    <div class="container mt-5">
+        <div class="card p-4">
+            <h1 class="mb-4">Edit Brand</h1>
+            <form action="/updatebrand" method="post">
+                <div class="form-group">
+                    <label for="name">Brand Name</label>
+                    <input type="text" class="form-control" id="name" name="bname"
+                        placeholder="Please fill the brandname" value="<%=  brands.bname %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="name"> Offer % </label>
+                    <input type="text" class="form-control" id="offer" name="offer"
+                        placeholder="Please fill the brandname" value="<%=  brands.offer %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Brand Description</label>
+                    <input type="text" class="form-control" id="description" name="description"
+                        placeholder="Please fill the description" value="<%= brands.description %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="expirationDate">Offer Expiration Date:</label>
+                    <input type="date" class="form-control" id="expirationDate" name="expirationDate" value="<%= brands.offerupto %>" required >
+                </div>
+                
+                <input type="hidden" name="id" value="<%=  brands._id %>">
+                <button type="submit" class="btn btn-primary">Update Brand</button>
+                <a href="/brandlist" class="btn btn-secondary ml-2">Go back</a>
+            </form>
+        </div>
+    </div>
+    <% include('../layouts/footer.ejs')%>
+
+    <!-- Bootstrap JS and jQuery (place these scripts at the end of the body for better performance) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

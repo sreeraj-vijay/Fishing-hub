@@ -1,0 +1,219 @@
+
+<%- include('../layouts/adminheader.ejs') %>
+<section>
+<div class="container mt-5">
+  <h3 style="color: blue;">Yearly Sales Report</h3>
+
+  <!-- Year Dropdown Select -->
+  <label for="yearSelect">Select Year:</label>
+  <div class="d-flex justify-content-end">
+  <button class="btn btn-primary" id="downloadButton" type="button" onclick="generatePDF()"><i
+    class="text-muted material-icons md-post_add"></i>Create report</button>
+  </div>
+  <br>
+  <a href="/salesreport">Go Back</a>
+  <br>
+  <br>
+  <select id="yearSelect" class="form-control">
+    <!-- JavaScript will populate options here -->
+  </select>
+  <br>
+  <h4 id="sumTotalContainer">Total Revenue:</h4>
+  <br>
+  <h4 id="sumTotalContainer1" >Total proucts:</h4>
+  <br>
+  <h4 id="sumTotalContainer2">COD  Orders:</h4>
+  <br>
+  <h4 id="sumTotalContainer3">Razorpay Orders:</h4>
+  <br>
+  <h4 id="sumTotalContainer4">Wallet Orders:</h4>
+
+
+  <table id="myTable" class="table mt-4">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product Name</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+        <th scope="col">Payment Date</th>
+        <th scope="col">Order ID</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+</section>
+<%- include('../layouts/adminfooter.ejs') %>
+
+<script>
+  const yearSelect = document.getElementById('yearSelect');
+  yearSelect.addEventListener('change', async () => {
+    const selectedYear = yearSelect.value;
+
+    try {
+      const response = await fetch('/yearwisereport', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ year: selectedYear }), // Wrap selectedYear in an object
+      });
+      const responseData = await response.json();
+      console.log( responseData)
+
+      // Loop through the response data and display it in the container
+     const totalSum = responseData.reduce((sum, item) => sum + item.total, 0);
+     let totalquantity = 0;
+     responseData.forEach(item => {
+    totalquantity=totalquantity+item.products[0].quantity
+    });
+    console.log(totalquantity)
+     let codPaymentCount = 0;
+     responseData.forEach(item => {
+     if (item.paymentMethod === "COD") {
+     codPaymentCount++;
+     }
+     });
+     let razorpayPaymentCount = 0;
+     responseData.forEach(item => {
+     if (item.paymentMethod === "razorpay") {
+     codPaymentCount++;
+     }
+     });
+     let WalletPaymentCount = 0;
+     responseData.forEach(item => {
+     if (item.paymentMethod === "Wallet") {
+      WalletPaymentCount++;
+     }
+     });
+     
+   
+
+    // Display the sum of the total in the container
+     sumTotalContainer.textContent = `Total Revenue: ${totalSum}`;
+     sumTotalContainer1.textContent = `Total Products Sailed: ${totalquantity}`;
+     sumTotalContainer2.textContent = `COD Count: ${codPaymentCount}`;
+     sumTotalContainer3.textContent = `Razorpay Count: ${razorpayPaymentCount}`;
+     sumTotalContainer4.textContent = `Wallet  Count: ${WalletPaymentCount}`;
+      const myTable = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+
+   responseData.forEach(item => {
+
+      const row = myTable.insertRow();
+      const productNameCell = row.insertCell(0);
+      const quantityCell = row.insertCell(1);
+      const pricecell=row.insertCell(2);
+      const orderedat=row.insertCell(3)
+      const payment=row.insertCell(4)
+      item.products.forEach(products=>{
+
+      productNameCell.textContent = products.description; // Replace with your actual property
+      quantityCell.textContent = products.quantity;
+  
+      pricecell.textContent=products.price;
+    })
+      orderedat.textContent=new Date(item.orderedAt).toLocaleDateString();
+      payment.textContent=item.paymentMethod
+   
+  });
+     
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
+
+  // Populate year options dynamically
+  const currentYear = new Date().getFullYear();
+  for (let year = currentYear; year >= currentYear - 20; year--) {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    yearSelect.appendChild(option);
+  }
+  function exportToPDF() {
+    const element = document.getElementById('container_content');
+    const opt = {
+        margin: 10,
+        filename: 'sales_report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    };
+
+    html2pdf().from(element).set(opt).save();
+}
+
+
+
+     function export_data() {
+         let data = document.getElementById('container_content');
+         var fp = XLSX.utils.table_to_book(data, { sheet: 'SalesReport' });
+         XLSX.write(fp, {
+             bookType: 'xlsx',
+             type: 'base64'
+         });
+         XLSX.writeFile(fp, 'test.xlsx');
+     }
+ 
+
+
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+    <script>
+
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Calculate the center position for the text
+    const text = "Sales Report";
+    const pageWidth = doc.internal.pageSize.width;
+    const textWidth = doc.getTextWidth(text);
+    const textX = (pageWidth - textWidth) / 2;
+
+    // Add the centered text to the PDF
+    doc.text(text, textX, 10);
+
+    // Define the margin top distance for the table (e.g., 3 units)
+    const tableMarginTop = 3;
+
+    // Get the table element by its ID
+    const originalTable = document.getElementById("myTable");
+    
+    // Create a clone of the original table
+    const clonedTable = originalTable.cloneNode(true);
+
+    // Format the numbers in the cloned table cells as currency with Indian Rupee symbol (₹)
+    const currencyFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' });
+    clonedTable.querySelectorAll('td:nth-child(6)').forEach((cell) => {
+        const textContent = cell.textContent;
+        if (textContent.length > 1) {
+            cell.textContent = textContent.substring(1);
+        } else {
+            cell.textContent = ''; // Remove the content if it's a single character
+        }
+    });
+
+    // Calculate the Y position for the table (below the text with margin)
+    const tableY = tableMarginTop + 20; // 20 is a padding for the table
+
+    // Use the HTMLTableElement's built-in function to generate the PDF from the cloned table
+    doc.autoTable({ html: clonedTable, startY: tableY });
+
+    // Save the PDF with a specific name
+    doc.save("table.pdf");
+}
+
+    </script>

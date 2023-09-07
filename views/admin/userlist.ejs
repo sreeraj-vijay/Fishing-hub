@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users List</title>
+  <!-- Bootstrap CSS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+  <%- include('../layouts/adminheader.ejs') %>
+  <section class="content-main">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title">Users List</h2>
+              <p>Lorem ipsum dolor sit amet.</p>
+              <table class="table table-bordered table-hover" id="myTable">
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (users.length > 0) {
+                      for (let i = 0; i < users.length; i++) { %>
+                  <tr>
+                    <td><%= users[i].fname %></td>
+                    <td><%= users[i].lname %></td>
+                    <td><%= users[i].mobile %></td>
+                    <td><%= users[i].email %></td>
+                    <td>
+                      <% if (users[i].is_blocked) { %>
+                      <a href="/admin/unblockuser?id=<%= users[i]._id %>" class="btn btn-success">Unblock</a>
+                      <% } else { %>
+                      <a href="/admin/blockuser?id=<%= users[i]._id %>" class="btn btn-warning">Block</a>
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% }
+                      } else { %>
+                  <tr>
+                    <td colspan="5">user not found</td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+              <a href="/adminhome" class="btn btn-primary">Go back</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <%- include('../layouts/adminfooter.ejs') %>
+  
+    <script>
+    $(document).ready(function() {
+    $.noConflict();
+      $('#myTable').DataTable({
+        "paging": true,          // Enable pagination
+        "pageLength": 10,        // Number of rows per page
+        "lengthMenu": [10, 25, 50, 75, 100],  // Dropdown options for rows per page
+
+      });
+    });
+  </script>
+
+  <!-- Bootstrap JS and jQuery (place these scripts at the end of the body for better performance) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+
+</html>

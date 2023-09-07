@@ -1,0 +1,80 @@
+<%- include('../layouts/header.ejs') %>
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Your Orders<span>Enjoy</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="container">
+            <div class="cart">
+                <div class="row">
+                    <div class="col-lg-12"> <!-- Use the full width of the column -->
+                        <h2>Your Orders</h2>
+                        <table class="table table-cart" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Payment Method</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                    <th>Order Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (let i = 0; i < order.length; i++) { %>
+                                    <tr>
+                                        <td class="product-col">
+                                            <h3 class="product-title">
+                                                <a href="#"><%= order[i].products[0].description %></a>
+                                            </h3>
+                                        </td>
+                                        <td class="quantity-col"><%= order[i].products[0].quantity %></td>
+                                        <td class="price-col"><%= order[i].products[0].price %></td>
+                                        <td class="price-col"><%= order[i].subtotal %></td>
+                                        <td class="total-col"><%= order[i].paymentMethod %></td>
+                                        <td class="total-col"><%= order[i].status %></td>
+                                        <td>
+                                            <% if (order[i].status === "Cancelled") { %>
+                                                <a type="button" class="btn btn-danger">Accepted</a>
+                                            <% } else if (order[i].status === "Delivered") { %>
+                                                <a type="button" href="/Cancelorder?id=<%= order[i]._id %>" class="btn btn-success">Return</a>
+                                            <% } else if (order[i].status === "Cancelled" && paymentoption === "razorpay") { %>
+                                                <a href="/Cancelorder?id=<%= order[i]._id %>" class="btn btn-danger">Cancel</a>
+                                            <% } else { %>
+                                                <a href="/Cancelorder?id=<%= order[i]._id %>" class="btn btn-danger">Cancel</a>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <a href="/orderdetails?id=<%= order[i]._id %>" class="btn btn-light">Order Details</a>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                        <a href="/users/shopmain" class="btn btn-outline-dark-2 btn-block mt-3">
+                            <span>CONTINUE SHOPPING</span><i class="icon-refresh"></i>
+                        </a>
+                    </div><!-- End .col-lg-12 -->
+                </div><!-- End .row -->
+            </div><!-- End .cart -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+<%- include('../layouts/footer.ejs') %>

@@ -1,0 +1,84 @@
+<%- include('../layouts/header.ejs') %>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wallet Dashboard</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+  h2, h5, p {
+      font-size: 24px; /* You can adjust the size as needed */
+    }
+
+    /* Increase the font size of button text */
+    .btn {
+      font-size: 18px; /* You can adjust the size as needed */
+    }
+
+    /* Increase the font size of table cell content */
+    table {
+      font-size: 18px; /* You can adjust the size as needed */
+    }  </style>
+<body>
+  <div class="container mt-5">
+    <h2>Wallet Dashboard</h2>
+    <% if (wallet) { %>
+        <!-- Wallet Balance -->
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Wallet Balance</h5>
+            <p class="card-text" style="color: green;">Your current balance: <%= wallet.balance %></p>
+            <!-- You can replace the balance value dynamically using your server data -->
+          </div>
+        </div>
+      
+        <!-- History Table -->
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Transaction History</h5>
+            <table class="table" id="myTable">
+              <thead>
+                <%for(let i=0;i<wallet.history.length;i++) { %>
+                <tr>
+                  <th >Date : </th>
+                  <th>Description : </th>
+                  <th>Amount : </th>
+                </tr>
+              </thead>
+              <br>
+              <br>
+              <tbody>
+                <tr>
+                  <td> <%=wallet.history[i].Date.toLocaleDateString()%></td>
+                  <td><%=wallet.history[i].from%></td>
+                  <td><%=wallet.history[i].price%></td>
+                </tr>
+                <%}%>
+                <!-- Add more rows dynamically based on your transaction history -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% } else { %>
+        <h1>Wallet Not Activated</h1>
+        <br>
+        <br>
+        <a href="/activatewallet" type="button" class="btn btn-secondary" style="width: 200px; height: 50px;" class="btn btn-light"><h2 style=" color: white;">Activate Wallet</h2></a>
+        <br>
+        <br>
+      <% } %>
+      
+  <!-- Include Bootstrap JS (for optional interactive components) -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+<br>
+<br>
+<br>
+
+<%- include('../layouts/footer.ejs') %>

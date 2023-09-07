@@ -1,0 +1,50 @@
+<%-include('../layouts/header.ejs')%> 
+<!DOCTYPE html>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">User Profile Details</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Full Name:</strong> <%= user.fname %> <%= user.lname %></p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Mobile:</strong> <%= user.mobile %></p>
+        <!-- Display other profile fields here -->
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <p><strong >Feferance Code:</strong> <h6 style="color: green;"><%= user.referenceCode %></h6></p >
+      </div>
+
+      <div class="col-md-6">
+        <p><strong>Addresses:</strong></p>
+        <% user.address.forEach(function(address, index) { %>
+          <div class="address-section">
+            <p> <%= address.order_name %>,</p>
+            <p> <%= address.newmobile %>,</p>
+            <p><%= address.house_address %>, <%= address.locality %></p>
+            <p><%= address.place %>, <%= address.state %>, <%= address.country %></p>
+            <p>Pincode: <%= address.pincode %></p>
+            <a href="/logeditprofile?addid=<%=address._id%>" >Edit Address</a>
+          <br>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+    <div class="text-center mt-3">
+      <a href="/editprofile" class="btn btn-primary">Edit Profile</a>
+    </div>
+    <div class="text-center mt-3">
+      <a href="/addnewaddress" class="btn btn-primary">Add Address</a>
+    </div>
+  </div>
+</body>
+  <br>
+  <br>
+  <br>
+
+ 
+
+
+<%-include('../layouts/footer.ejs')%>  

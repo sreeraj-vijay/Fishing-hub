@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Form</title>
+    <!-- Add Bootstrap CSS link here -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h3>Enter OTP</h3>
+        <div id="countdown-timer"></div>
+        <form method="get" action="/otp">
+            <div class="form-group">
+                <label for="otpInput">OTP:</label>
+                <input type="text" class="form-control" id="otpInput" name="otp" placeholder="Enter OTP" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="/resendotp" class="btn btn-secondary" onclick="resendOTP()">Resend OTP</a>
+
+        </form>
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery links here -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        let countdownInterval; // Declare the interval variable globally
+
+        // Function to update the countdown timer display
+        function updateCountdown(timeRemaining) {
+            const countdownElement = document.getElementById("countdown-timer");
+            countdownElement.innerHTML = `Resend OTP in ${timeRemaining} seconds`;
+        }
+
+        // Function to start the countdown timer
+        function startCountdown(timeInSeconds) {
+            let remainingTime = timeInSeconds;
+            updateCountdown(remainingTime);
+
+            countdownInterval = setInterval(() => {
+                remainingTime -= 1;
+
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    updateCountdown("Resend OTP");
+                    return;
+                }
+
+                updateCountdown(remainingTime);
+            }, 1000); // Update every 1 second
+        }
+
+
+        // Call the function to start the countdown when the page loads
+        window.onload = function () {
+            // Set the time remaining in seconds (60 seconds for 1 minute)
+            const timeRemainingInSeconds = 60;
+            startCountdown(timeRemainingInSeconds);
+        };
+    </script>
+</body>
+</html>

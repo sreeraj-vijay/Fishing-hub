@@ -1,0 +1,198 @@
+<%- include('../layouts/header.ejs')%>
+
+        <main class="main">
+        	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        		<div class="container">
+        			<h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Shopping Cart</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+			<% if(typeof message !== 'undefined') { %>
+				<h10 style="color: red "><%= message %></h10>
+			<% } %>
+
+            <div class="page-content">
+            	<div class="cart">
+	                <div class="container">
+	                	<div class="row">
+	                		<div class="col-lg-9">
+	                			<table class="table table-cart table-mobile" id="myTable">
+									<thead>
+										<tr>
+											<th>Product</th>
+											<th>Price</th>
+											<th>Quantity</th>
+											<th>Total</th>
+											<th></th>
+										</tr>
+									</thead>
+
+									<tbody>
+										<% for (let i = 0; i < cart.length; i++) { %>
+											<%if(cart[i].productstock>0){%>
+										<tr>
+											<td class="product-col">
+												<div class="product">
+													<figure class="product-media">
+														<a href="#">
+															<img src="/product-images/<%= cart[i].productimage %>" alt="Product Image">
+														</a>
+													</figure>
+									
+													<h3 class="product-title">
+														<a href="#"><%= cart[i].productdescription %></a>
+													</h3><!-- End .product-title -->
+												</div><!-- End .product -->
+											</td>
+											<td class="price-col"><%= cart[i].productprice %></td>
+											<td class="quantity-col">
+												
+												<div class="cart-product-quantity">
+													<input
+														type="number"
+														class="form-control quantity-input"
+														name="quantity"
+														value="<%= cart[i].quantity %>"
+														min="1"
+														max="10"
+														step="1"
+														data-decimals="0"
+														data-product-id="<%= cart[i]._id %>"
+														required >
+												</div><!-- End .cart-product-quantity -->
+											</td>
+											
+											<td class="total-col"><%= cart[i].productprice %></td>
+											<td class="quantity-display"></td>
+											<td class="remove-col"><button class="btn-remove"><a href="/deletecart?id=<%=cart[i]._id%>" class="icon-close"></a></button></td>
+										</tr>
+										<% } else{%>
+											<tr>
+												<td class="product-col">
+													<div class="product">
+														<figure class="product-media">
+															<a href="#">
+																<img src="/product-images/<%= cart[i].productimage %>" alt="Product Image">
+															</a>
+														</figure>
+										
+														<h3 class="product-title">
+															<a href="#" style="color: red;">Out Of Stock</a>
+														</h3><!-- End .product-title -->
+													</div><!-- End .product -->
+												</td>
+												<td class="price-col"><%= cart[i].productprice %></td>
+												<td class="quantity-col">
+													
+													<div class="cart-product-quantity">
+														
+													</div><!-- End .cart-product-quantity -->
+												</td>
+												
+												<td class="total-col"><%= cart[i].productprice %></td>
+												<td class="quantity-display"></td>
+												<td class="remove-col"><button class="btn-remove"><a href="/deletecart?id=<%=cart[i]._id%>" class="icon-close"></a></button></td>
+											</tr>
+											
+											<%   } %>
+										<% } %>
+									</tbody>
+								</table><!-- End .table table-wishlist -->
+</table>
+	                	
+	                		</div><!-- End .col-lg-9 -->
+	                		<aside class="col-lg-3">
+	                			<div class="summary summary-cart">
+	                				<h3 class="summary-title">Cart Total</h3><!-- End .summary-title -->
+
+	                				<table class="table table-summary" id="myTable">
+	                					<tbody>
+	                						<tr class="summary-subtotal">
+	                							<td>Subtotal:</td>
+												<td>Subtotal:</td>
+	                						</tr><!-- End .summary-subtotal -->
+	                			
+	                					</tbody>
+	                				</table><!-- End .table table-summary -->
+
+	                				<a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+	                			</div><!-- End .summary -->
+
+		            			<a href="/users/shopmain" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+	                		</aside><!-- End .col-lg-3 -->
+	                	</div><!-- End .row -->
+	                </div><!-- End .container -->
+                </div><!-- End .cart -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+		<!-- Your existing HTML code (unchanged) -->
+
+<!-- Add this script section -->
+<script>
+    function updateTotal(inputElement) {
+        const cartRows = document.querySelectorAll('.table-cart tbody tr');
+        let subtotal = 0;
+
+        cartRows.forEach(row => {
+            const productPriceElement = row.querySelector('.price-col');
+            const productPrice = parseFloat(productPriceElement.innerText);
+
+            const quantityInput = row.querySelector('.quantity-input');
+            const quantity = parseFloat(quantityInput.value);
+
+            const productTotal = productPrice * quantity;
+
+            const totalElement = row.querySelector('.total-col');
+            totalElement.innerText = `$${productTotal.toFixed(2)}`;
+
+            const quantityDisplay = row.querySelector('.quantity-display');
+            quantityDisplay.innerText = quantity;
+
+            subtotal += productTotal;
+        });
+
+        const subtotalElement = document.querySelector('.summary-subtotal td:last-child');
+        subtotalElement.innerText = `$${subtotal.toFixed(2)}`;
+
+        const checkoutLink = document.querySelector('.btn-order');
+        const updatedSubtotal = subtotal.toFixed(2);
+        checkoutLink.href = `/checkout?subtotal=${encodeURIComponent(updatedSubtotal)}`;
+    }
+
+	function handleQuantityChange(event) {
+    const input = event.target;
+    const productId = input.getAttribute('data-product-id');
+    const newQuantity = parseFloat(input.value);
+
+    // Update the local cart display
+    updateTotal(input);
+
+    // Send the product update for the specific item to the server
+    fetch("/updatequantities", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify([{ productId, quantity: newQuantity }]),
+    });
+}
+
+
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', handleQuantityChange);
+    });
+
+    updateTotal();
+</script>
+<%- include('../layouts/footer.ejs')%>
+
+        

@@ -1,0 +1,36 @@
+<%- include('../layouts/adminheader.ejs') %>
+    <div class="container mt-5">
+        <div class="card p-4">
+            <h3 class="mb-4" style="color: blue;">Apply offer</h3>
+            <form action="/updateofferforbrand" method="post">
+                <div class="form-group">
+                    <label for="name">Brand Name</label>
+                    <select class="form-control" id="name" name="bname" required>
+                        <% for(let i = 0; i < brand.length; i++) { %>
+                            <option  value="<%= brand[i].bname %>"><%= brand[i].bname %></option>
+                        <% } %>
+                    </select>
+                    
+                <div class="form-group">
+                    <label for="offer">Offer Percentage</label>
+                    <input type="text" class="form-control" id="offer" name="offer"
+                        placeholder="Please fill the offer percentage" value="" required>
+                </div>
+        
+                <div class="form-group">
+                    <label for="expirationDate">Offer Expiration Date</label>
+                    <input type="date" class="form-control" id="expirationDate" name="expirationDate"
+                        value="" required>
+                </div>
+                <br>
+
+                <input type="hidden" name="id" value="">
+                <button type="submit" class="btn btn-primary">Update product Offer</button>
+                <a href="/adminhome" class="btn btn-secondary ml-2">Go back</a>
+            </form>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <%- include('../layouts/adminfooter.ejs') %>

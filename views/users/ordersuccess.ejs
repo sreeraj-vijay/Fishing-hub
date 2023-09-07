@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Order Successful</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://kit.fontawesome.com/a8469362d0.js" crossorigin="anonymous"></script>
+  <style>
+    /* Custom styles for the address-details div */
+    .address-details {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .address-details h3 {
+      color: #007bff;
+      margin-bottom: 15px;
+    }
+
+    .address-details p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5 text-center">
+    <i class="fas fa-check-circle check-icon" style="color: #28A745; font-size: 72px;"></i>
+    <h2>Order Successful</h2>
+    <p>Thank you for your purchase!</p>
+    <div class="address-details">
+      <h3>Delivery Address</h3>
+      <p>Name: <%= order.userAddress.address[0].order_name %> </p>
+      <p>Mobile:  <%= order.userAddress.address[0].newmobile %></p>
+      <p>Address:   <%= order.userAddress.address[0].house_address %></p>
+      <p>City:  <%= order.userAddress.address[0].locality %> </p>
+      <p>Pincode:  <%= order.userAddress.address[0].pincode %> </p>
+      <p>District:   <%= order.userAddress.address[0].District %> </p>
+      <p>State:  <%= order.userAddress.address[0].state %> </p>
+    </div>
+    <a href="/orderdetails?id=<%= order._id %>" class="btn btn-primary my-3">View Orders</a>
+    <a href="/users/shopmain" class="btn btn-success my-3">Continue Shopping</a>
+  </div>
+</body>
+</html>

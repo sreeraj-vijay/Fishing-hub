@@ -1,0 +1,59 @@
+<%- include('../layouts/header.ejs') %>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">Add new address</h2>
+    <form action="/newaddress" method="POST">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="mobile">Mobile:</label>
+            <input type="tel" id="mobile" name="newmobile" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="mobile" name="name" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="house_address">House Address:</label>
+            <input type="text" id="house_address" name="house_address" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="locality">Locality:</label>
+            <input type="text" id="locality" name="locality" class="form-control" required>
+          </div>
+          </div>
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="place">Place:</label>
+            <input type="text" id="place" name="place" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" class="form-control" required>
+          </div>
+          </div>
+          <div class="col-md-6">
+          <div class="form-group">
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode" class="form-control" required>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary">Add new address</button>
+      </div>
+    </form>
+  </div>
+  <br>
+  <br>
+
+</body>
+
+<%- include('../layouts/footer.ejs') %>

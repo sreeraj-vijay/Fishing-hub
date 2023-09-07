@@ -1,0 +1,62 @@
+
+<%- include('../layouts/adminheader.ejs') %>
+
+  <section class="content-main">
+    <div class="container">
+      <h3>Product Details</h3>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover" id="myTable">
+          <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Payment Status</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (order.length > 0) { %>
+              <% for (let i = 0; i < order.length; i++) { %>
+                <tr>
+                  <td><%= order[i]._id %></td>
+                  <td><%= order[i].orderedAt.toLocaleDateString() %></td>
+                  <% if (order[i].status =="Delivered") { %>
+                    <td style="color:green;"><%= order[i].status %></td> 
+                    <% } else if (order[i].status =="Cancelled"){ %>
+                      <td style="color: red;"><%= order[i].status %></td>
+                      <% } else { %>
+                        <td style="color: blue;"><%= order[i].status %></td>
+                     <% } %>
+                  
+                  <% if (order[i].status == "Cancelled") { %>
+                    <td>
+                      <a href="#" class="btn btn-danger">Cancelled  ..</a>
+                    </td>
+                  <% } else if (order[i].status == "Delivered")  { %>
+                    <td>
+                      <a href="#" class="btn btn-success">Delivered  ..</a>
+                    </td>
+                    <% } else {%>
+                    <td>
+                      <a href="editorder?id=<%= order[i]._id %>"class="btn btn-secondary btn-lg">Edit.</a>
+                      
+                    </td>
+                  <% } %>
+                </tr>
+              <% } %>
+            <% } else { %>
+              <tr>
+                <td colspan="4">No orders found</td>
+              </tr>
+            <% } %>
+            
+          </tbody>
+        </table>
+      </div>
+      <a href="/adminhome" class="btn btn-primary">Go back</a>
+    </div>
+  </section>
+  <%- include('../layouts/adminfooter.ejs') %>
+
+
+
