@@ -1,6 +1,6 @@
-
 const user= require('../models/userModel')
 const mongoose = require('mongoose');
+require('dotenv').config();
 const product = require('../models/productmodel');
 const wishlist = require('../models/wishlist');
 const brand=require('../models/brandmodels');
@@ -20,9 +20,11 @@ const fs=require('fs')
 const { Readable } = require('stream');
 const { ConversationContextImpl } = require('twilio/lib/rest/conversations/v1/conversation');
 // Your AccountSID and Auth Token from console.twilio.com
-const accountSid = "ACc3b3b9265cfab5224105f7eaaf05d5fe";
-const authToken = "1e93d8e0bd5bca25e542e6f92899aed6";
-const verifySid = "VA7ee986915d0d5e7bffc960de4c889eba";
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const verifySid = process.env.TWILIO_VERIFY_SID;
+
 const client = require("twilio")(accountSid, authToken);
 
 // const { search } = require('../routes/userRoute');
@@ -214,7 +216,7 @@ const forgotpasswordotp = async (req, res) => {
 
     req.session.newpassword = password
     req.session.mobile= mobileNumber
-
+    console.log(client)
   client.verify.v2
       .services(verifySid)
       .verifications.create({ to: `+91${mobileNumber}`, channel: "sms" })
