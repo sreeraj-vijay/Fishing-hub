@@ -35,7 +35,7 @@ const addproduct = async (req, res) => {
       image: images,
       type: req.body.type,
       weight: req.body.weight,
-      stock:req.body.stock
+      stock:req.body.stock,
     });
 
     const addnew = await addnewproduct.save();

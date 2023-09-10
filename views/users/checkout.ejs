@@ -1,159 +1,164 @@
 <%-include('../layouts/header.ejs')%>
 
-        <main class="main">
-        	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-        		<div class="container">
-        			<h1 class="page-title">Checkout<span>Shop</span></h1>
-        		</div><!-- End .container -->
-        	</div><!-- End .page-header -->
-            <nav aria-label="breadcrumb" class="breadcrumb-nav">
-                <div class="container">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                    </ol>
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Checkout<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
 
-            <div  class="page-content">
-            	<div  class="checkout">
-	                <div  class="container">
-            			<div class="checkout-discount">
-							<form  id="coupon-form">
-								<input  type="text" name="code" class="form-control" required id="checkout-discount-input">
-								<label for="checkout-discount-input" style="color: red;" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-								
-							  </form>
-          <div id="coupon-result"></div>
-          <br>
-          <a type="button" href="/coupondisplay" class="btn btn-light">Available Coupons</a>
-            			</div><!-- End .checkout-discount -->
-            			<form  id="checkoutform" method="post">
-		                	<div class="row">
-		                		<div class="col-lg-9">
-		                			<h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-		                				
-									<% users.address.forEach(function(address, index) { %>
-										<input type="radio" id="address<%= index %>" name="selectedAddress" value="<%= address._id %>" required>
-										<div class="address-section">
-										  <label for="address<%= index %>" id="address">
-											<%= address.order_name %>,<br>
-											<%= address.newmobile %>,<br>
-											<%= address.house_address %>, <%= address.locality %><br>
-											<%= address.place %>, <%= address.state %>, <%= address.country %><br>
-											Pincode: <%= address.pincode %>
-										  </label>
-										  <br>
-										  <br>
-									  <% }); %>
-									</div>
-									</div>
-	        							<div class="custom-control custom-checkbox">
-											<a class="btn btn-primary" href="/addnewaddress"> Add new address</a>
-										</div><!-- End .custom-checkbox -->
+    <div class="page-content">
+        <div class="checkout">
+            <div class="container">
+                <div class="checkout-discount">
+                    <form id="coupon-form">
+                        <input type="text" name="code" class="form-control" required id="checkout-discount-input">
+                        <label for="checkout-discount-input" style="color: red;" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+                    </form>
+                    <div id="coupon-result"></div>
+                    <br>
+                    <a type="button" href="/coupondisplay" class="btn btn-light">Available Coupons</a>
+                </div><!-- End .checkout-discount -->
+                <form id="checkoutform" method="post">
+                    <div class="row">
+                        <!-- Address Section -->
+                        <div class="col-lg-9">
+                            <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
+                            <% if (users.address.length > 0) { %>
+                                <div class="address-section">
+                                    <% users.address.forEach(function(address, index) { %>
+                                        <input type="radio" id="address<%= index %>" name="selectedAddress" value="<%= address._id %>" required>
+                                        <label for="address<%= index %>" id="address">
+                                          <%= address.order_name %>,<br>
+                                          <%= address.newmobile %>,<br>
+                                          <%= address.house_address %>, <%= address.locality %><br>
+                                          <%= address.place %>, <%= address.state %>, <%= address.country %><br>
+                                          Pincode: <%= address.pincode %>
+                                        </label>
+                                        <br>
+                                        <br>
+                                    <% }); %>
+                                </div>
+                            <% } else { %>
+                              <h5 style="color: red;">Please add an address it is mandatory.
+                              </h5>
+                            <% } %>
+                            <div class="custom-control custom-checkbox">
+                                <a class="btn btn-primary" href="/addnewaddress">Add new address</a>
+                            </div><!-- End .custom-checkbox -->
 
-										<div class="custom-control custom-checkbox">
-											
-											<a class="btn btn-primary"  href="/profile">Edit address</a>
-										</div><!-- End .custom-checkbox -->
-		                		</div><!-- End .col-lg-9 -->
-		                		<aside class="col-lg-3">
-		                			<div class="summary">
-		                				<h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                            <div class="custom-control custom-checkbox">
+                                <a class="btn btn-primary" href="/profile">Edit address</a>
+                            </div><!-- End .custom-checkbox -->
+                        </div><!-- End .col-lg-9 -->
 
-		                				<table class="table table-summary">
-		                					<thead>
-														<tr>
-															<th>Product</th>
-															<th>Total</th>
-														</tr>
-													</thead>
-													<tbody>
-														<% for (let i = 0; i < cart.length; i++) { %>
-															<tr>
-																<td><%= cart[i].productdescription %> (1)</td>
-																<td><%= cart[i].productprice %></td>
-                            
-                                
-															</tr>
-														<% } %>
-													</tbody>
-												
-		                						<tr class="summary-subtotal" id="subtotal" >
-		                							<td>Subtotal:</td>
-		                							<td><span id="coupondis"><%=subtotal%></span></td>
-		                						</tr><!-- End .summary-subtotal -->
-                                <!-- <input type="hidden" name="subtotal" value="<%=subtotal%>"> -->
-		                					</tbody>
-		                				</table><!-- End .table table-summary -->
-										<div id="coupon-result">
-											<tr>
-												<p id="actual-total" name="actualtotal" style="color: black; font-size: 18px;"> </p>
-												
-                      </tr>
-												</div>
-												<br> 
-												<br>
-<div class="accordion-summary" id="payment">
-    <div class="card">
-        <div class="card-header"  id="heading-1">
-            <h2 class="card-title">
-              <input type="radio" name="option"  value="COD" required>
-               
-                &nbsp; &nbsp;  Cash On Delivery
-            </h2>
-        </div><!-- End .card-header -->
-        <div id="collapse-1" class="collapse" aria-labelledby="heading-1" data-parent="#accordion-payment">
-            <div class="card-body">
-                Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
-            </div><!-- End .card-body -->
-        </div><!-- End .collapse -->
-    </div><!-- End .card -->
-    <br>
-    <div class="card">
-        <div class="card-header"  id="heading-2" >
-            <h2 class="card-title "  >
-              <input type="radio"  name="option"  value="razorpay" required>
-                &nbsp; &nbsp;  Razo Pay
-            </h2>
-        </div><!-- End .card-header -->
-        <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment">
-            <div class="card-body">
-                Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
-            </div><!-- End .card-body -->
-        </div><!-- End .collapse -->
-    </div><!-- End .card -->
-    <br>
-    <div class="card">
-        <div class="card-header"  id="heading-3">
-            <h2 class="card-title">
-              <input type="radio"  name="option"  value="Wallet" required>
-                &nbsp; &nbsp; Wallet
-            </h2>
-        </div><!-- End .card-header -->
-        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
-            <div class="card-body">
-                Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
-            </div><!-- End .card-body -->
-        </div><!-- End .collapse -->
-    </div><!-- End .card -->
-    <br>
-</div><!-- End .accordion-summary -->
+                        <!-- Order Summary Section -->
+                        <aside class="col-lg-3">
+                            <div class="summary">
+                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
 
-		                			<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-		                					<span class="btn-text">Place Order</span>
-		                					<span  class="btn-hover-text">Place Order</span>
-		                				</button>
-		                			</div><!-- End .summary -->
-		                		</aside><!-- End .col-lg-3 -->
-		                	</div><!-- End .row -->
-            			</form>
-	                </div><!-- End .container -->
-                </div><!-- End .checkout -->
-            </div><!-- End .page-content -->
-        </main><!-- End .main -->
-		<script>
+                                <table class="table table-summary">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% for (let i = 0; i < cart.length; i++) { %>
+                                            <tr>
+                                                <td><%= cart[i].productdescription %> (1)</td>
+                                                <td><%= cart[i].productprice %></td>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                    <tr class="summary-subtotal" id="subtotal" >
+                                        <td>Subtotal:</td>
+                                        <td><span id="coupondis"><%=subtotal%></span></td>
+                                    </tr><!-- End .summary-subtotal -->
+                                </table><!-- End .table table-summary -->
+
+                                <div id="coupon-result">
+                                    <tr>
+                                        <p id="actual-total" name="actualtotal" style="color: black; font-size: 18px;"> </p>
+                                    </tr>
+                                </div>
+                                <br> 
+                                <br>
+
+                                <!-- Payment Options Section (Accordion) -->
+                                <div class="accordion-summary" id="payment">
+                                    <!-- Payment Option 1: Cash On Delivery -->
+                                    <div class="card">
+                                        <div class="card-header" id="heading-1">
+                                            <h2 class="card-title">
+                                                <input type="radio" name="option" value="COD" required>
+                                                &nbsp; &nbsp;  Cash On Delivery
+                                            </h2>
+                                        </div><!-- End .card-header -->
+                                        <div id="collapse-1" class="collapse" aria-labelledby="heading-1" data-parent="#accordion-payment">
+                                            <div class="card-body">
+                                                Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .collapse -->
+                                    </div><!-- End .card -->
+                                    <br>
+
+                                    <!-- Payment Option 2: Razo Pay -->
+                                    <div class="card">
+                                        <div class="card-header" id="heading-2" >
+                                            <h2 class="card-title "  >
+                                                <input type="radio" name="option" value="razorpay" required>
+                                                &nbsp; &nbsp;  Razo Pay
+                                            </h2>
+                                        </div><!-- End .card-header -->
+                                        <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment">
+                                            <div class="card-body">
+                                                Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .collapse -->
+                                    </div><!-- End .card -->
+                                    <br>
+
+                                    <!-- Payment Option 3: Wallet -->
+                                    <div class="card">
+                                        <div class="card-header" id="heading-3">
+                                            <h2 class="card-title">
+                                                <input type="radio" name="option" value="Wallet" required>
+                                                &nbsp; &nbsp; Wallet
+                                            </h2>
+                                        </div><!-- End .card-header -->
+                                        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
+                                            <div class="card-body">
+                                                Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .collapse -->
+                                    </div><!-- End .card -->
+                                    <br>
+                                </div><!-- End .accordion-summary -->
+
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    <span class="btn-text">Place Order</span>
+                                    <span class="btn-hover-text">Place Order</span>
+                                </button>
+                            </div><!-- End .summary -->
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+                </form>
+            </div><!-- End .container -->
+        </div><!-- End .checkout -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+<script>
 			
 		// Client-Side JavaScript
   document.addEventListener('DOMContentLoaded', () => {

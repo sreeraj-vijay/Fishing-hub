@@ -36,13 +36,9 @@
                 <td><%= products[i].name %></td>
                 <td><%= products[i].brand %></td>
                 <td>
-                  <% if (products[i].image && products[i].image.length > 0) { %>
-                    <% products[i].image.forEach((image) => { %>
-                      <img src="/product-images/<%= image %>" alt="Uploaded Image" class="product-image" data-toggle="modal" data-target="#imageModal" data-image="/product-images/<%= image %>">
-                    <% }); %>
-                  <% } else { %>
-                    No images found
-                  <% } %>
+                
+                      <img src="/product-images/<%= products[i].image[0] %>" alt="Uploaded Image" class="product-image" data-toggle="modal" data-target="#imageModal" data-image="/product-images/<%= products[i].image[0] %>">
+                  
                 </td>
                 <td><%= products[i].type %></td>
                 <td><%= products[i].description %></td>

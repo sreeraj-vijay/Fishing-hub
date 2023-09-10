@@ -69,5 +69,6 @@ user_route.post('/referancecodeverify',userController.referancecodeverify)
 user_route.get("/invoice",usermiddle.islogin,userController.downloadInvoice)
 user_route.get("/contact",userController.contact)
 user_route.post("/usercomplaint",usermiddle.islogin,userController.usercomplaint)
+user_route.get("/errorpage",userController.errorpage)
 
 module.exports=user_route

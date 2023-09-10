@@ -13,7 +13,7 @@
 <form action="/addnewproduct" method="post" enctype="multipart/form-data">
   <section class="content-main">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-12">
         <div class="card mb-4">
           <div class="card-header">
             <h4>Basic</h4>
@@ -57,21 +57,75 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="card mb-4">
-          <div class="card-header">
-            <h4>Media</h4>
+        <div class="col-lg-12">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4>Media</h4>
+            </div>
+            <div class="input-upload">
+              <img src="/imgs/theme/upload.svg" id="imgView1" alt="">
+              <input class="form-control" id="input1" name="image" onchange="viewImage(event, 1)" type="file">
+            </div>
+            <div class="image-cropper" style="display:none;">
+              <img src="" id="croppedImg1" alt="">
+              <button type="button" id="saveButton1" class="btn-sm btn-primary">Save</button>
+            </div>
+            <span id="imageError1"></span>
           </div>
-          <div class="input-upload">
-            <img src="/imgs/theme/upload.svg" id="imgView1" alt="">
-            <input class="form-control" id="input1" name="image" onchange="viewImage1(event),viewImage(event, 1)" type="file">
-          </div>
-          <div class="image-cropper" style="display:none;">
-            <img src="" id="croppedImg1" alt="">
-            <button type="button" id="saveButton1" class="btn-sm btn-primary">Save</button>
-          </div>
-          <span id="imageError"></span>
         </div>
+        
+        <div class="col-lg-12">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4>Media</h4>
+            </div>
+            <div class="input-upload">
+              <img src="/imgs/theme/upload.svg" id="imgView2" alt="">
+              <input class="form-control" id="input2" name="image" onchange="viewImage(event, 2)" type="file">
+            </div>
+            <div class="image-cropper" style="display:none;">
+              <img src="" id="croppedImg2" alt="">
+              <button type="button" id="saveButton2" class="btn-sm btn-primary">Save</button>
+            </div>
+            <span id="imageError2"></span>
+          </div>
+        </div>
+        
+        <div class="col-lg-12">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4>Media</h4>
+            </div>
+            <div class="input-upload">
+              <img src="/imgs/theme/upload.svg" id="imgView3" alt="">
+              <input class="form-control" id="input3" name="image" onchange="viewImage(event, 3)" type="file">
+            </div>
+            <div class="image-cropper" style="display:none;">
+              <img src="" id="croppedImg3" alt="">
+              <button type="button" id="saveButton3" class="btn-sm btn-primary">Save</button>
+            </div>
+            <span id="imageError3"></span>
+          </div>
+        </div>
+        
+        <div class="col-lg-12">
+          <div class="card mb-4">
+            <div class="card-header">
+              <h4>Media</h4>
+            </div>
+            <div class="input-upload">
+              <img src="/imgs/theme/upload.svg" id="imgView4" alt="">
+              <input class="form-control" id="input4" name="image" onchange="viewImage(event, 4)" type="file">
+            </div>
+            <div class="image-cropper" style="display:none;">
+              <img src="" id="croppedImg4" alt="">
+              <button type="button" id="saveButton4" class="btn-sm btn-primary">Save</button>
+            </div>
+            <span id="imageError4"></span>
+          </div>
+        </div>
+        
+    
         
         <div class="card mb-4">
           <div class="card-header">
@@ -82,7 +136,7 @@
               <label class="form-label">Type</label>
               <select class="form-select" name="type">
                 <option>Reel</option>
-                <option>Road</option>
+                <option>Rod</option>
                 <option>Frogs</option>
                 <option>Lures</option>
                 <option>Others</option>
@@ -93,7 +147,7 @@
         </div>
         <div class="form-group">
           <label for="product_weight" class="form-label">Stock</label>
-          <input type="text" class="form-control" id="product_weight" name="Stock" placeholder="Enter Number of products">
+          <input type="text" class="form-control" id="product_weight" name="stock" placeholder="Enter Number of products">
         </div>
       </div>
     </div>
@@ -125,6 +179,9 @@ document.getElementById('imgView2').src = URL.createObjectURL(event.target.files
 
 function viewImage3(event) {
 document.getElementById('imgView3').src = URL.createObjectURL(event.target.files[0])
+}
+function viewImage4(event) {
+document.getElementById('imgView4').src = URL.createObjectURL(event.target.files[0])
 }
 </script>
 <script>
@@ -193,8 +250,8 @@ image.onload = function() {
    let saveButton = document.querySelector('#saveButton' + index);
    saveButton.addEventListener('click', async function() {
      let croppedCanvas = cropper.getCroppedCanvas({
-       width: 600, 
-       height: 600 
+       width: 300, 
+       height: 300 
      });
      let croppedImage = document.getElementById("croppedImg" + index);
      croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);

@@ -51,7 +51,7 @@ const loadRegister=async(req,res)=>{
         res.render('login')
 
     }catch(error){
-        console.log(error.message)
+        res.render("errorpage")
 
     }
 
@@ -100,10 +100,11 @@ const createUser = async (req, res) => {
           const spassword = await securepassword(req.session.userData.password);
           const newUser = new user({
             fname: req.session.userData.fname,
-            lname: req.session.userData.email, // This seems incorrect. You probably want 'lname' to be the last name, not the email.
+            lname: req.session.userData.lname, // This seems incorrect. You probably want 'lname' to be the last name, not the email.
             mobile: req.session.userData.mobile,
             email: req.session.userData.email,
             password: spassword,
+            rreferenceCode:req.session.userData.fname+req.session.userData.email
           });
 
           const userdata = await newUser.save();
@@ -146,7 +147,7 @@ const loginload=async(req,res)=>{
         res.render('login')
 
     }catch(error){
-        console.log(error.message)
+      res.render("errorpage")
     }
 }
 // verify user login
@@ -176,7 +177,7 @@ const verifylogin = async(req,res)=>{
         }
 
     }catch(error){
-        console.log(error.message)
+      res.render("errorpage")
 
     }
     
@@ -190,7 +191,7 @@ const verifylogin = async(req,res)=>{
         res.render('home',{products:productdata,banner:bannerdata})
 
     }catch(error){
-        console.log(error.message)
+      res.render("errorpage")
     }
 
 }
@@ -200,12 +201,16 @@ const userlogout=async(req,res)=>{
       res.redirect('/login')
       
   }catch(error){
-      console.log(error.message)
+    res.render("errorpage")
 
   }
 }
 const forgotpassword=(req,res)=>{
+  try{
   res.render("forgotpassword")
+  }catch(error){
+    res.render("errorpage")
+  }
 }
 
 const forgotpasswordotp = async (req, res) => {
@@ -227,7 +232,7 @@ const forgotpasswordotp = async (req, res) => {
          })
   }
   catch (error) {
-    console.log(error.message);
+    res.render("errorpage")
   }
 }
 
@@ -258,9 +263,7 @@ const forgotpasswordotpverify = async (req, res) => {
         }
       });
   } catch (error) {
-    console.error(error.message);
-    // Handle errors gracefully and send an appropriate response.
-    res.status(500).send("Internal Server Error");
+    res.render("errorpage")
   }
 }
 
@@ -328,7 +331,7 @@ const loadmainshop = async (req, res) => {
       searchQuery
     });
   } catch (error) {
-    console.log(error.message);
+    res.render("errorpage")
   }
 
 };
@@ -340,11 +343,6 @@ const resendotp= async(req,res)=>{
         upperCaseAlphabets: false,
         lowerCaseAlphabets: false,
       });
-      //  await client.messages.create({
-      //     body: `Your OTP for Smart Wrist Sign Up is: ${otp}`,
-      //     from: "19033548588",
-      //     to: `+91${user.mobile}`,
-      //   });
 
       console.log(`Otp is ${otp}`);
 
@@ -358,7 +356,7 @@ const resendotp= async(req,res)=>{
       res.render("wishlist",{wishlist:wishlistdata})
 
     }catch(error){
-      console.log(error.message)
+      res.render("errorpage")
     }
   }
 const addtowishlist=async(req,res)=>{
@@ -391,18 +389,20 @@ const deletewishlist=async(req,res)=>{
     const wishlistdata=await wishlist.deleteOne({_id:id})
     res.redirect("/wishlist")
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
 
   }
 }
 const loadcart=async(req,res)=>{
   try{
     const id=req.session.user_id
+
     const cartdata=await cart.find({userid:id})
-    res.render("cart",{cart:cartdata})
+    const message=req.query.message
+    res.render("cart",{cart:cartdata,message})
 
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 const addtocart=async(req,res)=>{
@@ -443,6 +443,7 @@ const loadcheckout=async(req,res)=>{
     const subtotal=req.query.subtotal
     const id=req.session.user_id
     const cartdata = await cart.find({ userid: id})
+    if(cartdata.lenght>0){
     const filteredCartData = cartdata.filter(item => item.productstock > 0);
     for (const cartItem of filteredCartData) {
       const newproduct = await product.findById(cartItem.productId);
@@ -465,8 +466,12 @@ const loadcheckout=async(req,res)=>{
 
     const userdata=await user.findOne({_id:id})
     res.render("checkout",{users:userdata,cart:filteredCartData,subtotal:subtotal})
+}else{
+  const message="At least one item must be in the cart."
+  res.redirect(`/cart?message=${encodeURIComponent(message)}`)
+}
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 const checkoutsubmit=async(req,res)=>{
@@ -497,7 +502,7 @@ const deletecart=async(req,res)=>{
     res.redirect("/cart")
     
   }catch(error){
-    console.log(error)
+    res.render("errorpage")
 
   }
 }
@@ -510,7 +515,7 @@ const viewprofile=async(req,res)=>{
     res.render("profile",{user:userData})
 
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 
@@ -576,7 +581,7 @@ const updateaddress = async (req, res) => {
 
     res.redirect("/profile");
   } catch (error) {
-    console.log(error.message);
+    res.render("errorpage")
   }
 };
 
@@ -587,7 +592,7 @@ const editprofilelogin=async(req,res)=>{
     res.render("editprofile",{user:userdata})
 
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
 
   }
 }
@@ -615,7 +620,7 @@ const addnewaddress=async(req,res)=>{
     const userdata=await user.findById({_id:id})
     res.render("addnewaddress",{user:userdata})
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 const newaddress = async (req, res) => {
@@ -639,7 +644,7 @@ const newaddress = async (req, res) => {
     res.redirect('/profile')
   }
   catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 const checkcoupon = async (req, res) => {
@@ -723,7 +728,7 @@ const paymentsuccess = async (req, res) => {
     const paymentoption = req.body.option
     const id = req.session.user_id;
     console.log(req.body)
-
+if( addressid){
     const newcart = await cart.find({ userid: id });
     const userdata = await user.findById(id);
     const newaddress = await user.findOne(
@@ -778,6 +783,11 @@ const paymentsuccess = async (req, res) => {
     } else {
       res.status(400).json({ error: "Invalid payment method" });
     }
+
+  }
+  else{
+    res.json({ valid: false, message: "Invalid please Add address " });
+  }
   } catch (error) {
     console.log(error.message);
     res.redirect("/checkout");
@@ -799,7 +809,7 @@ const verifypayment=async(req,res)=>{
             return res.json({ success: false, error: 'Payment verification failed' });
         }
     } catch (error) {
-        console.log(error.message);
+      res.render("errorpage")
     }
 }
 const successpage = async (req, res) => {
@@ -831,7 +841,7 @@ const orderdetails = async (req, res) => {
 
     res.render("orderdetails", { order: orderdata});
   } catch (error) {
-    console.log(error.message);
+    res.render("errorpage")
   }
 };
 const yourorders =async(req,res)=>{
@@ -842,7 +852,7 @@ const yourorders =async(req,res)=>{
     res.render("yourorder",{order:orderdata})
 
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 const Cancelorder = async (req,res)=>{
@@ -884,7 +894,7 @@ const Cancelorder = async (req,res)=>{
     res.redirect("/yourorders")
 
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 const forcod=async(req,res)=>{
@@ -941,7 +951,7 @@ const dispalywallet= async(req,res)=>{
     console.log(walletdata)
     res.render("walletdata",{wallet:walletdata})
 }catch(error){
-  console.log(error.message)
+  res.render("errorpage")
 }
 }
 const activatewallet=async(req,res)=>{
@@ -958,7 +968,7 @@ const activatewallet=async(req,res)=>{
     res.render("walletdata",{wallet:updatedwallet})
 
   }catch(error){
-    console.log(error.message)
+    res.render("errorpage")
   }
 }
 const referancecodeverify = async (req, res) => {
@@ -981,7 +991,7 @@ const referancecodeverify = async (req, res) => {
       console.log(valiedwallet )
     res.json({valiedwallet});
   } catch (error) {
-      console.log(error.message);
+    res.render("errorpage")
   }
 };
 
@@ -1076,11 +1086,18 @@ const usercomplaint=async(req,res)=>{
  res.render('contact', { message: 'Response updated successfully' });
     
   }catch(error){
- console.log(error.message)
+    res.render("errorpage")
   }
 }
+const errorpage=async(req,res)=>{
+  try{
+    res.render("errorpage")
+    
+  }catch(error){
 
-
+    console.log(error.message)
+  }
+}
 
 module.exports={
     loadRegister,
@@ -1128,5 +1145,6 @@ module.exports={
     referancecodeverify,
     downloadInvoice,
     contact,
-    usercomplaint
+    usercomplaint,
+    errorpage
 }
