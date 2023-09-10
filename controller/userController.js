@@ -443,7 +443,7 @@ const loadcheckout=async(req,res)=>{
     const subtotal=req.query.subtotal
     const id=req.session.user_id
     const cartdata = await cart.find({ userid: id})
-    if(cartdata.lenght>=0){
+    if(cartdata.length>=0){
     const filteredCartData = cartdata.filter(item => item.productstock > 0);
     for (const cartItem of filteredCartData) {
       const newproduct = await product.findById(cartItem.productId);
